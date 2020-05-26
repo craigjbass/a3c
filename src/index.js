@@ -3,15 +3,21 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { listAvailableTracks } from './configuration';
+import {listAvailableTracks} from './configuration';
 import TrackSelector from "./TrackSelector";
+import {Link, Router, navigate} from "@reach/router"
+
+const TrackSelectionPage = () => <App>
+  <TrackSelector
+    listAvailableTracks={listAvailableTracks()}
+    selectTrack={(track) => console.log(track)}
+  ></TrackSelector>
+</App>
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App>
-      <TrackSelector listAvailableTracks={listAvailableTracks()}></TrackSelector>
-    </App>
-  </React.StrictMode>,
+  <Router>
+    <TrackSelectionPage path="/"/>
+  </Router>,
   document.getElementById('root')
 );
 
