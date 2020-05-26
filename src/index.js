@@ -3,10 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { listAvailableTracks } from './configuration';
+import TrackSelector from "./TrackSelector";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App>
+      <TrackSelector listAvailableTracks={listAvailableTracks()}></TrackSelector>
+    </App>
   </React.StrictMode>,
   document.getElementById('root')
 );

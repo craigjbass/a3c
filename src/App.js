@@ -1,25 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Navbar, Button, Alignment} from "@blueprintjs/core";
 
-function App() {
+function App({children}) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar>
+        <Navbar.Group align={Alignment.LEFT}>
+          <Navbar.Heading>A3C</Navbar.Heading>
+          <Navbar.Divider/>
+          <Button className="bp3-minimal" icon="list-detail-view" text="Event designer"/>
+        </Navbar.Group>
+      </Navbar>
+      <div className="app-frame">
+        {children}
+      </div>
+    </>
   );
 }
 
