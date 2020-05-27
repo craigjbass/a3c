@@ -1,27 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {listAvailableTracks} from './configuration';
-import TrackSelector from "./TrackSelector";
-import {Link, Router, navigate} from "@reach/router"
+import {Router, navigate} from "@reach/router"
+import _A3c from './views/A3c'
 
-const TrackSelectionPage = () => <App>
-  <TrackSelector
-    listAvailableTracks={listAvailableTracks()}
-    selectTrack={(track) => console.log(track)}
-  ></TrackSelector>
-</App>
+const A3c = _A3c({navigate, Router})
 
 ReactDOM.render(
-  <Router>
-    <TrackSelectionPage path="/"/>
-  </Router>,
+  <A3c/>,
   document.getElementById('root')
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();

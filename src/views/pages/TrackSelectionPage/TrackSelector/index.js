@@ -2,7 +2,6 @@ import React from 'react';
 import './TrackSelector.css'
 import {Tag, Card, Elevation, Popover, AnchorButton} from "@blueprintjs/core";
 
-
 const TrackSelection = ({track, selectTrack}) => {
   const YearSelector = () => <div>
     <h5>Which year?</h5>
@@ -55,13 +54,14 @@ const TrackSelection = ({track, selectTrack}) => {
   </>
 }
 
-export default ({listAvailableTracks, selectTrack}) => <>
-  <h1>Choose track</h1>
-  <div className="track-selection">
-    {listAvailableTracks().tracks.map(
-      (track) => <TrackSelection key={track.id}
-                                 track={track}
-                                 selectTrack={selectTrack}/>
-    )}
-  </div>
-</>
+export default ({listAvailableTracks}) =>
+  ({selectTrack}) => <>
+    <h1>Choose track</h1>
+    <div className="track-selection">
+      {listAvailableTracks().tracks.map(
+        (track) => <TrackSelection key={track.id}
+                                   track={track}
+                                   selectTrack={selectTrack}/>
+      )}
+    </div>
+  </>
