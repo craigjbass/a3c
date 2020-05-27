@@ -1,0 +1,24 @@
+
+.event-name {
+    margin-bottom: 50px;
+}
+
+.event-editor {
+    display: grid;
+    grid-template-columns: 50% auto;
+    column-gap: 5%;
+}
+
+.sessions {
+    margin-top: 25px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.sessions_Session {
+    min-width: 200px;
+    width: 40%;
+    margin-right: 2%;
+    margin-bottom: 25px;
+}

@@ -1,10 +1,17 @@
 import React from 'react';
 import './TrackSelector.css'
-import {Tag, Card, Elevation, Popover, AnchorButton} from "@blueprintjs/core";
+import {
+  Tag,
+  Card,
+  Elevation,
+  Popover,
+  AnchorButton,
+  H6, H5, H4, H1
+} from "@blueprintjs/core";
 
 const TrackSelection = ({track, selectTrack}) => {
   const YearSelector = () => <div>
-    <h5>Which year?</h5>
+    <H5>Which year?</H5>
     <p>
       {track.variants.map(
         (variant) => <React.Fragment key={variant.track_id}>
@@ -19,7 +26,8 @@ const TrackSelection = ({track, selectTrack}) => {
   const TrackCard = ({onClick}) => <Card interactive={true}
                                          elevation={Elevation.TWO}
                                          onClick={onClick}>
-    <h3>{track.name}</h3>
+    <H4>{track.name}</H4>
+    <H6>"{track.short_name}"</H6>
     <img
       alt=""
       className="track-selection_TrackLayout"
@@ -56,7 +64,6 @@ const TrackSelection = ({track, selectTrack}) => {
 
 export default ({listAvailableTracks}) =>
   ({selectTrack}) => <>
-    <h1>Choose track</h1>
     <div className="track-selection">
       {listAvailableTracks().tracks.map(
         (track) => <TrackSelection key={track.id}
