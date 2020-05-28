@@ -10,7 +10,7 @@ export default ({Layout, navigate, listAvailableTracks}) => {
   return () => <Layout>
     <Breadcrumbs
       items={[
-        { href: "#", icon: "list", text: "Choose track" }
+        { icon: "list", text: "Choose track" }
       ]}
     />
     <TrackSelector selectTrack={selectTrack}/>

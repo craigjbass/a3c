@@ -9,8 +9,7 @@ import {
   Breadcrumbs,
   Elevation,
   ButtonGroup,
-  Button,
-  AnchorButton
+  Button
 } from "@blueprintjs/core";
 
 import './EventCreatorPage.css'
@@ -21,8 +20,8 @@ export default ({Layout}) =>
     return <Layout>
       <Breadcrumbs
         items={[
-          { href: "/", icon: "list", text: "Choose track" },
-          { href: "#", icon: "list-detail-view", text: "Event editor"}
+          { icon: "list", text: "Choose track" },
+          { icon: "list-detail-view", text: "Event editor"}
         ]}
       />
       <div className="event-editor">
@@ -36,7 +35,7 @@ export default ({Layout}) =>
             />
           </H1>
           <H2>Race session(s) <ButtonGroup minimal={true}>
-            <Button icon="add">Add</Button>
+            <Button icon="add" onClick={() => setDrawerOpen(true)}>Add</Button>
           </ButtonGroup></H2>
           <div className="sessions">
             <Card elevation={Elevation.TWO} className="sessions_Session">
