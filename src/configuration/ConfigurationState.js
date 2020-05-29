@@ -1,12 +1,12 @@
 import { v4 as uuid } from 'uuid';
 
 export default class ConfigurationState {
-    newEvent = (track_id) => {
+    newEvent = (event) => {
         const id = uuid()
-        localStorage.setItem(id, JSON.stringify({ id, track_id: track_id }))
+        localStorage.setItem(id, JSON.stringify({ ...event, id }))
         return id
     }
-    EventDoesNotExist = (id) => !localStorage.getItem(id)
+    eventDoesNotExist = (id) => !localStorage.getItem(id)
     getEvents = () => {
         const events = []
         for(let i = 0; i<localStorage.length; i++) {

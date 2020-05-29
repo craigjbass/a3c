@@ -3,7 +3,7 @@ import expectedTracks from "./_tests/expectedTracks";
 import {ViewEventPresenterSpy} from "./presenterTestDoubles/ViewEventPresenterSpy";
 import {ListEventsPresenterSpy} from "./presenterTestDoubles/ListEventsPresenterSpy";
 import {ExportConfigurationPresenterSpy} from "./presenterTestDoubles/ExportConfigurationPresenterSpy";
-import { make } from '../main'
+import {make} from '../main'
 
 const expectDotJsonFileToMatchDefaults = (dotJsonFileName, actualConfiguration) => {
   expect(actualConfiguration[dotJsonFileName]).toStrictEqual(expectedDefaults[dotJsonFileName])
@@ -75,10 +75,10 @@ test('can create a new event', () => {
   const {createEvent, viewEvent} = make()
   const {id} = createEvent({track_id: 'kyalami_2019'})
 
-  const sessionPresenter = new ViewEventPresenterSpy()
-  viewEvent({id}, sessionPresenter)
+  const presenter = new ViewEventPresenterSpy()
+  viewEvent({id}, presenter)
 
-  expect(sessionPresenter._track).toStrictEqual(
+  expect(presenter._track).toStrictEqual(
     {
       id: "kyalami_2019",
       name: "Kyalami Grand Prix Circuit",
@@ -87,9 +87,10 @@ test('can create a new event', () => {
       variant_name: '2019'
     }
   )
-  expect(sessionPresenter.wasNotFound).toBe(false)
-  expect(sessionPresenter.raceSessions[0]).toStrictEqual(
+  expect(presenter.wasNotFound).toBe(false)
+  expect(presenter.raceSessions[0]).toStrictEqual(
     {
+      id: presenter.raceSessions[0].id,
       startAt: '18:00',
       startOn: 'Saturday',
       duration: '20',
@@ -98,8 +99,9 @@ test('can create a new event', () => {
     }
   )
 
-  expect(sessionPresenter.nonRaceSessions[0]).toStrictEqual(
+  expect(presenter.nonRaceSessions[0]).toStrictEqual(
     {
+      id: presenter.nonRaceSessions[0].id,
       startAt: '06:00',
       startOn: 'Friday',
       duration: '10',
@@ -108,8 +110,9 @@ test('can create a new event', () => {
       type: 'Practice'
     }
   )
-  expect(sessionPresenter.nonRaceSessions[1]).toStrictEqual(
+  expect(presenter.nonRaceSessions[1]).toStrictEqual(
     {
+      id: presenter.nonRaceSessions[1].id,
       startAt: '12:00',
       startOn: 'Friday',
       duration: '10',
@@ -118,10 +121,44 @@ test('can create a new event', () => {
       type: 'Qualifying'
     }
   )
-  expect(sessionPresenter.isDone).toBe(true)
+  expect(presenter.isDone).toBe(true)
 })
 
+test('can delete a non race session', () => {
+  const {createEvent, deleteSessionFromEvent, exportConfiguration, viewEvent} = make()
+  const {id} = createEvent({track_id: 'kyalami_2019'})
 
+  let presenter = new ViewEventPresenterSpy()
+  viewEvent({id}, presenter)
+
+  deleteSessionFromEvent({eventId: id, sessionId: presenter.nonRaceSessions[0].id})
+
+  presenter = new ViewEventPresenterSpy()
+  viewEvent({id}, presenter)
+
+  expect(presenter.nonRaceSessions.length).toBe(1)
+
+  const presenter2 = new ExportConfigurationPresenterSpy()
+  exportConfiguration({event_id: id}, presenter2);
+
+  const actualConfiguration = presenter2.configuration
+  expect(actualConfiguration['event.json']['sessions']).toStrictEqual([
+    {
+      "dayOfWeekend": 1,
+      "hourOfDay": 12,
+      "sessionDurationMinutes": 10,
+      "sessionType": "Q",
+      "timeMultiplier": 1,
+    },
+    {
+      "dayOfWeekend": 2,
+      "hourOfDay": 18,
+      "sessionDurationMinutes": 20,
+      "sessionType": "R",
+      "timeMultiplier": 2,
+    }
+  ])
+})
 
 test('can list all events', () => {
   const {createEvent, listEvents} = make()

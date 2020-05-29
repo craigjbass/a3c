@@ -31,29 +31,22 @@ export default (configurationState) =>
       "cloudLevel": 0.1,
       "rain": 0,
       "weatherRandomness": 1,
-      "sessions": [
-        {
-          "hourOfDay": 6,
+      "sessions": [].concat(
+        event.nonRaceSessions.map(s => ({
+          "hourOfDay": parseInt(s.startAt.split(':')[0].replace(/^0/, '')),
           "dayOfWeekend": 1,
           "timeMultiplier": 1,
-          "sessionType": "P",
+          "sessionType": s.type === "Qualifying" ? "Q" : "P",
           "sessionDurationMinutes": 10
-        },
-        {
-          "hourOfDay": 12,
-          "dayOfWeekend": 1,
-          "timeMultiplier": 1,
-          "sessionType": "Q",
-          "sessionDurationMinutes": 10
-        },
-        {
+        })),
+        event.raceSessions.map(s => ({
           "hourOfDay": 18,
           "dayOfWeekend": 2,
           "timeMultiplier": 2,
           "sessionType": "R",
           "sessionDurationMinutes": 20
-        }
-      ],
+        }))
+      ),
       "qualifyStandingType": 1,
       "pitWindowLengthSec": -1,
       "driverStintTimeSec": -1,

@@ -5,7 +5,8 @@ import {
   listAvailableTracks,
   listEvents,
   updateEventName,
-  viewEvent
+  viewEvent,
+  deleteSessionFromEvent
 } from "./configuration";
 
 export const make = () => {
@@ -17,6 +18,7 @@ export const make = () => {
     createEvent: createEvent(configurationState),
     listEvents: listEvents(configurationState),
     updateEventName: updateEventName(configurationState),
-    deleteEvent: deleteEvent(configurationState)
+    deleteEvent: deleteEvent(configurationState),
+    deleteSessionFromEvent: deleteSessionFromEvent(configurationState)
   }
 }

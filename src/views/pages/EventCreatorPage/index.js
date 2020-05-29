@@ -14,12 +14,15 @@ import {
   Spinner,
   NonIdealState,
   Intent,
-  Tag
+  Tag,
+  Position
 } from "@blueprintjs/core";
 
 import './EventCreatorPage.css'
 
-export default ({Layout, viewEvent, exportConfiguration, updateEventName, deleteEvent, navigate}) => {
+const initialState = {state: undefined, raceSessions: [], nonRaceSessions: []};
+
+export default ({Layout, viewEvent, exportConfiguration, updateEventName, deleteEvent, deleteSessionFromEvent, navigate}) => {
   const download = (eventId) => exportConfiguration({event_id: eventId})
   const deletThis = (id) => {
     deleteEvent({id})
@@ -27,10 +30,11 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
   }
   const preview = (eventId) => navigate(`/events/${eventId}/preview`)
   const editEventName = (id, name) => updateEventName({id, name})
+  const deleteSession = (sessionId, eventId) => deleteSessionFromEvent({eventId, sessionId})
 
   return ({id: eventId}) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [event, setEvent] = useState({state: undefined, raceSessions: [], nonRaceSessions: []})
+    const [event, setEvent] = useState(initialState)
 
     useEffect(() => {
       if (event.state === 'not-found') return
@@ -108,6 +112,8 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
           </ButtonGroup></H2>
           <div className="sessions">
             {event.raceSessions.map((session) => <Card elevation={Elevation.TWO}
+                                                       interactive={true}
+                                                       onClick={() => setDrawerOpen(true)}
                                                        className="sessions_Session">
                 <H4>Race ({session.startOn})</H4>
                 <p>{session.startAt}</p>
@@ -120,8 +126,18 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
           </ButtonGroup></H2>
           <div className="sessions">
             {event.nonRaceSessions.map((session) => <Card elevation={Elevation.TWO}
+                                                          interactive={true}
+                                                          onClick={() => setDrawerOpen(true)}
                                                           className="sessions_Session">
-                <H4>{session.type} ({session.startOn})</H4>
+                <H4>{session.type} ({session.startOn}) <Button icon="trash"
+                                                               intent={Intent.DANGER}
+                                                               onClick={(e) => {
+                                                                 e.stopPropagation()
+                                                                 setEvent(initialState)
+                                                                 deleteSession(session.id, eventId);
+                                                               }}
+                                                               minimal={true} />
+                </H4>
                 <p>{session.startAt}</p>
                 <p>{session.actualDuration} minutes</p>
               </Card>
@@ -136,7 +152,10 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
         </div>
 
       </div>
-      <Drawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)}/>
+      <Drawer isOpen={drawerOpen}
+              size={Drawer.SIZE_SMALL}
+              position={Position.LEFT}
+              onClose={() => setDrawerOpen(false)}/>
     </Layout>
   };
 }

@@ -14,7 +14,8 @@ export default ({navigate, Router, make}) => {
     listEvents,
     exportConfiguration,
     updateEventName,
-    deleteEvent
+    deleteEvent,
+    deleteSessionFromEvent
   } = make()
 
   const DefaultLayout = _DefaultLayout({navigate})
@@ -40,9 +41,10 @@ export default ({navigate, Router, make}) => {
     {
       Layout: DefaultLayout,
       navigate,
-      viewEvent: viewEvent,
-      updateEventName: updateEventName,
-      deleteEvent: deleteEvent,
+      viewEvent,
+      updateEventName,
+      deleteEvent,
+      deleteSessionFromEvent,
       exportConfiguration: (params) => exportConfiguration({...params}, saveAsZipPresenter)
     }
   )
@@ -51,7 +53,7 @@ export default ({navigate, Router, make}) => {
     {
       Layout: DefaultLayout,
       navigate,
-      exportConfiguration: exportConfiguration
+      exportConfiguration
     }
   )
 
