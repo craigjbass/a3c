@@ -3,7 +3,6 @@ import expectedDefaults from './_tests/defaults'
 import expectedTracks from "./_tests/expectedTracks";
 import {
   exportConfiguration,
-  updateServerName,
   listAvailableTracks,
   viewEvent,
   createEvent,
@@ -14,7 +13,6 @@ const make = () => {
   const configurationState = new ConfigurationState()
   return {
     exportConfiguration: exportConfiguration(configurationState),
-    updateServerName: updateServerName(configurationState),
     listAvailableTracks: listAvailableTracks(),
     viewEvent: viewEvent(configurationState),
     createEvent: createEvent(configurationState),
@@ -45,12 +43,6 @@ test('can view default configuration', () => {
   )
 });
 
-test('can change the server name', () => {
-  const {updateServerName, exportConfiguration} = make()
-  updateServerName({serverName: "Cars"})
-  expect((exportConfiguration())['settings.json']['serverName']).toBe("Cars")
-})
-
 test('can list available tracks', () => {
   const {listAvailableTracks} = make()
   const availableTracks = listAvailableTracks()
@@ -72,7 +64,7 @@ test('cannot view an event that does not exist', () => {
 
 test('can create a new event', () => {
   const {createEvent, viewEvent} = make()
-  const {id} = createEvent({track: 'kyalami_2019'})
+  const {id} = createEvent({track_id: 'kyalami_2019'})
 
   const raceSessions = []
   const nonRaceSessions = []
@@ -130,12 +122,12 @@ test('can create a new event', () => {
   expect(isDone).toBe(true)
 })
 
-test('cannot list all events', () => {
+test('can list all events', () => {
   const {createEvent, listEvents} = make()
 
-  const {id: id1} = createEvent({track: 'kyalami_2019'})
-  const {id: id2} = createEvent({track: 'kyalami_2019'})
-  const {id: id3} = createEvent({track: 'kyalami_2019'})
+  const {id: id1} = createEvent({track_id: 'kyalami_2019'})
+  const {id: id2} = createEvent({track_id: 'kyalami_2019'})
+  const {id: id3} = createEvent({track_id: 'kyalami_2019'})
 
   let events = []
   let done = false
@@ -148,10 +140,60 @@ test('cannot list all events', () => {
 
   expect(events).toStrictEqual(
     [
-      {id: id1},
-      {id: id2},
-      {id: id3}
+      {id: id1, name: 'untitled', track_name: 'Kyalami'},
+      {id: id2, name: 'untitled', track_name: 'Kyalami'},
+      {id: id3, name: 'untitled', track_name: 'Kyalami'}
     ]
   )
   expect(done).toBe(true)
+})
+
+test('can create events for different tracks', () => {
+  const {createEvent, listEvents} = make()
+
+  const {id: id1} = createEvent({track_id: 'kyalami_2019'})
+  const {id: id2} = createEvent({track_id: 'suzuka_2019'})
+  const {id: id3} = createEvent({track_id: 'zandvoort_2019'})
+
+  let events = []
+  let done = false
+  const presenter = {
+    event: (event) => events.push(event),
+    done: () => done = true
+  }
+
+  listEvents({}, presenter)
+
+  expect(events).toStrictEqual(
+    [
+      {id: id1, name: 'untitled', track_name: 'Kyalami'},
+      {id: id2, name: 'untitled', track_name: 'Suzuka'},
+      {id: id3, name: 'untitled', track_name: 'Zandvoort'}
+    ]
+  )
+  expect(done).toBe(true)
+})
+
+test('can display correct track when viewing event', () => {
+  const {createEvent, viewEvent} = make()
+  const {id} = createEvent({track_id: 'suzuka_2019'})
+
+  let track = undefined
+  const sessionPresenter = {
+    raceSession: (session) => {},
+    nonRaceSession: (session) => {},
+    track: (_track) => track = _track,
+    notFound: () => {},
+    done: () => {}
+  }
+  viewEvent({id}, sessionPresenter)
+
+  expect(track).toStrictEqual(
+    {
+      id: "suzuka_2019",
+      name: "Suzuka Circuit",
+      short_name: "Suzuka",
+      variant_name: '2019'
+    }
+  )
 })

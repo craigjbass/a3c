@@ -3,9 +3,6 @@ import tracks from './tracks'
 
 export const exportConfiguration = _exportConfiguration
 
-export const updateServerName = (configurationState) =>
-  ({serverName}) => configurationState.update('serverName', serverName)
-
 export const listAvailableTracks = () =>
   () => ({ tracks })
 
@@ -13,12 +10,19 @@ export const viewEvent = (configurationState) =>
   ({id}, presenter) => {
     if(configurationState.EventDoesNotExist(id)) return presenter.notFound();
 
+    const event = configurationState.getEvent(id)
+    const track = tracks.find((value => {
+      return value.variants.find((variant) => variant.track_id === event.track_id) !== undefined
+    }))
+
+    const variant = track.variants.find((v) => v.track_id === event.track_id)
+
     presenter.track(
       {
-        id: "kyalami_2019",
-        name: "Kyalami Grand Prix Circuit",
-        short_name: "Kyalami",
-        variant_name: '2019'
+        id: event.track_id,
+        name: track.name,
+        short_name: track.short_name,
+        variant_name: variant.variant_name
       }
     )
     presenter.raceSession(
@@ -54,11 +58,17 @@ export const viewEvent = (configurationState) =>
   }
 
 export const createEvent = (configurationState) =>
-  ({track_id}) => ({id: configurationState.newEvent() })
+  ({track_id}) => ({id: configurationState.newEvent(track_id) })
 
 export const listEvents = (configurationState) =>
   (_, presenter) => {
       let events = configurationState.getEvents();
-      events.forEach((event) => presenter.event({id: event.id}))
+      events.forEach((event) => {
+          const track_name = tracks.find((value => {
+            return value.variants.find((variant) => variant.track_id === event.track_id) !== undefined
+          })).short_name
+          presenter.event({id: event.id, name: 'untitled', track_name: track_name});
+        }
+      )
       presenter.done()
   }
