@@ -20,9 +20,10 @@ import {
 import './EventCreatorPage.css'
 
 export default ({Layout, viewEvent, exportConfiguration, navigate}) => {
-  const download = (event_id) => exportConfiguration({event_id})
+  const download = (eventId) => exportConfiguration({event_id: eventId})
+  const preview = (eventId) => navigate(`/events/${eventId}/preview`)
 
-  return ({trackId: eventId}) => {
+  return ({id: eventId}) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [event, setEvent] = useState({state: undefined, raceSessions: [], nonRaceSessions: []})
 
@@ -61,10 +62,16 @@ export default ({Layout, viewEvent, exportConfiguration, navigate}) => {
     </Layout>
 
     return <Layout contextual={
-      <Button icon="cloud-download"
-              onClick={() => download(eventId)}>
-        Export configuration
-      </Button>
+      <>
+        <Button icon="cloud-download"
+                onClick={() => download(eventId)}>
+          Export
+        </Button>
+        <Button icon="lab-test"
+                onClick={() => preview(eventId)}>
+          Preview
+        </Button>
+      </>
     }>
       <Breadcrumbs
         items={[
@@ -111,11 +118,11 @@ export default ({Layout, viewEvent, exportConfiguration, navigate}) => {
         <div>
           <H1>{event.track.name}</H1>
           <Tag large={true}>{event.track.variant_name}</Tag>
-          <img alt="" src={`/tracks/${event.track.short_name}.png`} width="100%"/>
+          <img alt="" src={`/tracks/${event.track.image_id}.png`} width="100%"/>
         </div>
 
       </div>
       <Drawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)}/>
-    </Layout>;
+    </Layout>
   };
 }

@@ -3,6 +3,7 @@ import _DefaultLayout from "./layouts/DefaultLayout";
 import _TrackSelectionPage from "./pages/TrackSelectionPage";
 import _EventCreatorPage from './pages/EventCreatorPage';
 import _EventListPage from './pages/EventListPage';
+import _ConfigPreviewPage from './pages/ConfigPreviewPage';
 import {listAvailableTracks, createEvent, viewEvent, listEvents, exportConfiguration} from "../configuration";
 import saveAsZip from "../presenter/saveAsZip";
 import ConfigurationState from "../configuration/ConfigurationState";
@@ -38,11 +39,20 @@ export default ({navigate, Router}) => {
     }
   )
 
+  const ConfigPreviewPage = _ConfigPreviewPage(
+    {
+      Layout: DefaultLayout,
+      navigate,
+      exportConfiguration: exportConfiguration(configurationState)
+    }
+  )
+
   return () => <>
     <Router>
       <TrackSelectionPage path="/"/>
       <EventListPage path="/events" />
-      <EventCreatorPage path="/events/:trackId"/>
+      <EventCreatorPage path="/events/:id"/>
+      <ConfigPreviewPage path="/events/:id/preview"/>
     </Router>
   </>
 }

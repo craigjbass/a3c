@@ -21,6 +21,7 @@ export const viewEvent = (configurationState) =>
       {
         id: event.track_id,
         name: track.name,
+        image_id: track.id,
         short_name: track.short_name,
         variant_name: variant.variant_name
       }

@@ -108,6 +108,7 @@ test('can create a new event', () => {
       id: "kyalami_2019",
       name: "Kyalami Grand Prix Circuit",
       short_name: "Kyalami",
+      image_id: "Kyalami",
       variant_name: '2019'
     }
   )
@@ -199,7 +200,7 @@ test('can create events for different tracks', () => {
 
 test('can display correct track when viewing event', () => {
   const {createEvent, viewEvent} = make()
-  const {id} = createEvent({track_id: 'suzuka_2019'})
+  const {id} = createEvent({track_id: 'brands_hatch'})
 
   let track = undefined
   const sessionPresenter = {
@@ -217,10 +218,11 @@ test('can display correct track when viewing event', () => {
 
   expect(track).toStrictEqual(
     {
-      id: "suzuka_2019",
-      name: "Suzuka Circuit",
-      short_name: "Suzuka",
-      variant_name: '2019'
+      id: "brands_hatch",
+      name: "Brands Hatch Circuit",
+      short_name: "Brands Hatch",
+      image_id: "BrandsHatch",
+      variant_name: '2018'
     }
   )
 })
