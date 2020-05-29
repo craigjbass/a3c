@@ -6,7 +6,7 @@ import {
   Elevation,
   Popover,
   AnchorButton,
-  H6, H5, H4, H1
+  H6, H5, H4
 } from "@blueprintjs/core";
 
 const TrackSelection = ({track, selectTrack}) => {

@@ -86,4 +86,13 @@ export default class ConfigurationState {
         return id
     }
     EventDoesNotExist = (id) => !localStorage.getItem(id)
+    getEvents = () => {
+        const events = []
+        for(let i = 0; i<localStorage.length; i++) {
+            events.push({
+                id: localStorage.key(i)
+            })
+        }
+        return events
+    }
 }

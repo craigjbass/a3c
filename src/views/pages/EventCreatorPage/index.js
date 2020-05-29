@@ -25,20 +25,21 @@ export default ({Layout, viewEvent, navigate}) =>
     const [event, setEvent] = useState({state: 'loading', raceSessions: [], nonRaceSessions: []})
 
     useEffect(() => {
-      if (event.state === 'not-found') return
-      if (event.state === 'done') return
+        if (event.state === 'not-found') return
+        if (event.state === 'done') return
 
-      viewEvent(
-        {id: trackId},
-        {
-          notFound: () => setEvent({state: 'not-found'}),
-          done: () => setEvent((e) => ({...e, state: 'done'})),
-          track: (track) => setEvent((e) => ({...e, track})),
-          raceSession: (session) => setEvent((e) => ({...e, raceSessions: [session].concat(e.raceSessions)})),
-          nonRaceSession: (session) => setEvent((e) => ({...e, nonRaceSessions: [session].concat(e.nonRaceSessions)})),
-        }
-      )
-    })
+        viewEvent(
+          {id: trackId},
+          {
+            notFound: () => setEvent({state: 'not-found'}),
+            done: () => setEvent((e) => ({...e, state: 'done'})),
+            track: (track) => setEvent((e) => ({...e, track})),
+            raceSession: (session) => setEvent((e) => ({...e, raceSessions: [session].concat(e.raceSessions)})),
+            nonRaceSession: (session) => setEvent((e) => ({...e, nonRaceSessions: [session].concat(e.nonRaceSessions)})),
+          }
+        )
+      },
+      [event, trackId ])
 
 
     if (event.state === 'loading') return <Layout>
@@ -90,7 +91,7 @@ export default ({Layout, viewEvent, navigate}) =>
           </ButtonGroup></H2>
           <div className="sessions">
             {event.nonRaceSessions.map((session) => <Card elevation={Elevation.TWO}
-                                                       className="sessions_Session">
+                                                          className="sessions_Session">
                 <H4>{session.type} ({session.startOn})</H4>
                 <p>{session.startAt}</p>
                 <p>{session.actualDuration} minutes</p>
@@ -102,7 +103,7 @@ export default ({Layout, viewEvent, navigate}) =>
         <div>
           <H1>{event.track.name}</H1>
           <Tag large={true}>{event.track.variant_name}</Tag>
-          <img src={`/tracks/${event.track.short_name}.png`} width="100%"/>
+          <img alt="" src={`/tracks/${event.track.short_name}.png`} width="100%"/>
         </div>
 
       </div>

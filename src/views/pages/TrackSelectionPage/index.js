@@ -7,7 +7,7 @@ export default ({Layout, createEvent, navigate, listAvailableTracks}) => {
   const TrackSelector = _TrackSelector({listAvailableTracks})
   const selectTrack = (track) => {
     const {id} = createEvent({track})
-    return navigate(`/event/${id}`);
+    return navigate(`/events/${id}`);
   }
 
   return () => <Layout>

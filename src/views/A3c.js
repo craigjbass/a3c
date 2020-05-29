@@ -1,20 +1,15 @@
 import React from 'react'
-import DefaultLayout from "./layouts/DefaultLayout";
+import _DefaultLayout from "./layouts/DefaultLayout";
 import _TrackSelectionPage from "./pages/TrackSelectionPage";
 import _EventCreatorPage from './pages/EventCreatorPage';
-import {listAvailableTracks, createEvent, viewEvent} from "../configuration";
+import _EventListPage from './pages/EventListPage';
+import {listAvailableTracks, createEvent, viewEvent, listEvents} from "../configuration";
 import ConfigurationState from "../configuration/ConfigurationState";
 
 export default ({navigate, Router}) => {
   const configurationState = new ConfigurationState()
 
-  const EventCreatorPage = _EventCreatorPage(
-    {
-      Layout: DefaultLayout,
-      navigate,
-      viewEvent: viewEvent(configurationState)
-    }
-  )
+  const DefaultLayout = _DefaultLayout({navigate})
 
   const TrackSelectionPage = _TrackSelectionPage(
     {
@@ -25,10 +20,29 @@ export default ({navigate, Router}) => {
     }
   )
 
+  const EventListPage = _EventListPage(
+    {
+      Layout: DefaultLayout,
+      navigate,
+      listEvents: listEvents(configurationState)
+    }
+  )
+
+  const EventCreatorPage = _EventCreatorPage(
+    {
+      Layout: DefaultLayout,
+      navigate,
+      viewEvent: viewEvent(configurationState)
+    }
+  )
+
+
+
   return () => <>
     <Router>
       <TrackSelectionPage path="/"/>
-      <EventCreatorPage path="/event/:trackId"/>
+      <EventListPage path="/events" />
+      <EventCreatorPage path="/events/:trackId"/>
     </Router>
   </>
 }

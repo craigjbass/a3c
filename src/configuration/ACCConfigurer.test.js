@@ -6,7 +6,8 @@ import {
   updateServerName,
   listAvailableTracks,
   viewEvent,
-  createEvent
+  createEvent,
+  listEvents
 } from '.'
 
 const make = () => {
@@ -16,13 +17,18 @@ const make = () => {
     updateServerName: updateServerName(configurationState),
     listAvailableTracks: listAvailableTracks(),
     viewEvent: viewEvent(configurationState),
-    createEvent: createEvent(configurationState)
+    createEvent: createEvent(configurationState),
+    listEvents: listEvents(configurationState)
   }
 }
 
 const expectDotJsonFileToMatchDefaults = (dotJsonFileName, actualConfiguration) => {
   expect(actualConfiguration[dotJsonFileName]).toStrictEqual(expectedDefaults[dotJsonFileName])
 }
+
+beforeEach(() => {
+  localStorage.clear()
+})
 
 test('can view default configuration', () => {
   const {exportConfiguration} = make()
@@ -122,4 +128,30 @@ test('can create a new event', () => {
     }
   )
   expect(isDone).toBe(true)
+})
+
+test('cannot list all events', () => {
+  const {createEvent, listEvents} = make()
+
+  const {id: id1} = createEvent({track: 'kyalami_2019'})
+  const {id: id2} = createEvent({track: 'kyalami_2019'})
+  const {id: id3} = createEvent({track: 'kyalami_2019'})
+
+  let events = []
+  let done = false
+  const presenter = {
+    event: (event) => events.push(event),
+    done: () => done = true
+  }
+
+  listEvents({}, presenter)
+
+  expect(events).toStrictEqual(
+    [
+      {id: id1},
+      {id: id2},
+      {id: id3}
+    ]
+  )
+  expect(done).toBe(true)
 })

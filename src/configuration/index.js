@@ -54,4 +54,11 @@ export const viewEvent = (configurationState) =>
   }
 
 export const createEvent = (configurationState) =>
-  () => ({id: configurationState.newEvent() })
+  ({track_id}) => ({id: configurationState.newEvent() })
+
+export const listEvents = (configurationState) =>
+  (_, presenter) => {
+      let events = configurationState.getEvents();
+      events.forEach((event) => presenter.event({id: event.id}))
+      presenter.done()
+  }
