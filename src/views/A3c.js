@@ -2,12 +2,17 @@ import React from 'react'
 import DefaultLayout from "./layouts/DefaultLayout";
 import _TrackSelectionPage from "./pages/TrackSelectionPage";
 import _EventCreatorPage from './pages/EventCreatorPage';
-import {listAvailableTracks} from "../configuration";
+import {listAvailableTracks, createEvent, viewEvent} from "../configuration";
+import ConfigurationState from "../configuration/ConfigurationState";
 
 export default ({navigate, Router}) => {
+  const configurationState = new ConfigurationState()
+
   const EventCreatorPage = _EventCreatorPage(
     {
-      Layout: DefaultLayout
+      Layout: DefaultLayout,
+      navigate,
+      viewEvent: viewEvent(configurationState)
     }
   )
 
@@ -15,6 +20,7 @@ export default ({navigate, Router}) => {
     {
       Layout: DefaultLayout,
       navigate,
+      createEvent: createEvent(configurationState),
       listAvailableTracks: listAvailableTracks()
     }
   )

@@ -3,9 +3,12 @@ import _TrackSelector from "./TrackSelector";
 import React from "react";
 import {Breadcrumbs} from "@blueprintjs/core";
 
-export default ({Layout, navigate, listAvailableTracks}) => {
+export default ({Layout, createEvent, navigate, listAvailableTracks}) => {
   const TrackSelector = _TrackSelector({listAvailableTracks})
-  const selectTrack = (track) => navigate(`/event/${track}`)
+  const selectTrack = (track) => {
+    const {id} = createEvent({track})
+    return navigate(`/event/${id}`);
+  }
 
   return () => <Layout>
     <Breadcrumbs

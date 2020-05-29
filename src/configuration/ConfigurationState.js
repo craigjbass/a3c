@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 export default class ConfigurationState {
     constructor() {
         this.state = {
@@ -78,4 +80,10 @@ export default class ConfigurationState {
 
     update = (key, value) => this.state[key] = value
     toObject = () => this.state;
+    newEvent = () => {
+        const id = uuid()
+        localStorage.setItem(id, JSON.stringify({}))
+        return id
+    }
+    EventDoesNotExist = (id) => !localStorage.getItem(id)
 }
