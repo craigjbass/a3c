@@ -22,27 +22,28 @@ import './EventCreatorPage.css'
 export default ({Layout, viewEvent, navigate}) =>
   ({trackId}) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [event, setEvent] = useState({state: 'loading', raceSessions: [], nonRaceSessions: []})
+    const [event, setEvent] = useState({state: undefined, raceSessions: [], nonRaceSessions: []})
 
     useEffect(() => {
-        if (event.state === 'not-found') return
-        if (event.state === 'done') return
+      if (event.state === 'not-found') return
+      if (event.state === 'done') return
+      if (event.state === 'loading') return
 
-        viewEvent(
-          {id: trackId},
-          {
-            notFound: () => setEvent({state: 'not-found'}),
-            done: () => setEvent((e) => ({...e, state: 'done'})),
-            track: (track) => setEvent((e) => ({...e, track})),
-            raceSession: (session) => setEvent((e) => ({...e, raceSessions: [session].concat(e.raceSessions)})),
-            nonRaceSession: (session) => setEvent((e) => ({...e, nonRaceSessions: [session].concat(e.nonRaceSessions)})),
-          }
-        )
-      },
-      [event, trackId ])
+      setEvent((e) => ({...e, state: 'loading'}))
+      viewEvent(
+        {id: trackId},
+        {
+          notFound: () => setEvent((e) => ({...e, state: 'not-found'})),
+          done: () => setEvent((e) => ({...e, state: 'done'})),
+          track: (track) => setEvent((e) => ({...e, track})),
+          raceSession: (session) => setEvent((e) => ({...e, raceSessions: [session].concat(e.raceSessions)})),
+          nonRaceSession: (session) => setEvent((e) => ({...e, nonRaceSessions: [session].concat(e.nonRaceSessions)})),
+        }
+      )
+    }, [event, trackId])
 
 
-    if (event.state === 'loading') return <Layout>
+    if ([undefined, 'loading'].includes(event.state)) return <Layout>
       <Spinner size="100"/>
     </Layout>
 
