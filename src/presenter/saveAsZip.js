@@ -2,14 +2,14 @@ import {saveAs} from 'file-saver';
 import JSZip from "jszip";
 
 export default {
-  configurationFiles: (configuration) => {
+  configurationFiles: (configuration, eventName) => {
     const zipFile = new JSZip();
     Object.entries(configuration).forEach(([fileName, content]) => {
       zipFile.file(fileName, JSON.stringify(content, null, 2))
     })
     zipFile.generateAsync({type: "blob"})
       .then(function (content) {
-        saveAs(content, "ACC-Config.zip");
+        saveAs(content, `${eventName}-ACC-Config.zip`);
       })
   }
 }

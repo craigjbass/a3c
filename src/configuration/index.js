@@ -55,7 +55,7 @@ export const viewEvent = (configurationState) =>
         type: 'Qualifying'
       }
     )
-    presenter.done()
+    presenter.done(event.name)
   }
 
 export const createEvent = (configurationState) =>
@@ -68,8 +68,11 @@ export const listEvents = (configurationState) =>
           const track_name = tracks.find((value => {
             return value.variants.find((variant) => variant.track_id === event.track_id) !== undefined
           })).short_name
-          presenter.event({id: event.id, name: 'untitled', track_name: track_name});
+          presenter.event({id: event.id, name: event.name || 'untitled', track_name: track_name});
         }
       )
       presenter.done()
   }
+
+export const updateEventName = (configurationState) =>
+  ({id, name}) => configurationState.update(id, (event) => ({...event, name}))

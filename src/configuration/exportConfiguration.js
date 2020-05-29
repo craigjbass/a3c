@@ -75,13 +75,16 @@ export default (configurationState) =>
       "disableAutoClutch": 0,
       "disableIdealLine": 0,
     }
-    presenter.configurationFiles({
-      "configuration.json": withConfigVersion(getConfigurationDotJson)(configuration),
-      "settings.json": withConfigVersion(getSettingsDotJson)(configuration),
-      "event.json": withConfigVersion(getEventDotJson)(configuration),
-      "eventRules.json": withConfigVersion(getEventRulesDotJson)(configuration),
-      "assistRules.json": withConfigVersion(getAssistRulesDotJson)(configuration)
-    })
+    presenter.configurationFiles(
+      {
+        "configuration.json": withConfigVersion(getConfigurationDotJson)(configuration),
+        "settings.json": withConfigVersion(getSettingsDotJson)(configuration),
+        "event.json": withConfigVersion(getEventDotJson)(configuration),
+        "eventRules.json": withConfigVersion(getEventRulesDotJson)(configuration),
+        "assistRules.json": withConfigVersion(getAssistRulesDotJson)(configuration)
+      },
+      event.name || 'Untitled'
+    )
   }
 
 const withConfigVersion = (f) => {

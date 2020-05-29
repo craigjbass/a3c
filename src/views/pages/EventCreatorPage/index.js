@@ -19,9 +19,10 @@ import {
 
 import './EventCreatorPage.css'
 
-export default ({Layout, viewEvent, exportConfiguration, navigate}) => {
+export default ({Layout, viewEvent, exportConfiguration, updateEventName, navigate}) => {
   const download = (eventId) => exportConfiguration({event_id: eventId})
   const preview = (eventId) => navigate(`/events/${eventId}/preview`)
+  const editEventName = (id, name) => updateEventName({id, name})
 
   return ({id: eventId}) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -37,7 +38,7 @@ export default ({Layout, viewEvent, exportConfiguration, navigate}) => {
         {id: eventId},
         {
           notFound: () => setEvent((e) => ({...e, state: 'not-found'})),
-          done: () => setEvent((e) => ({...e, state: 'done'})),
+          done: (name) => setEvent((e) => ({...e, name, state: 'done'})),
           track: (track) => setEvent((e) => ({...e, track})),
           raceSession: (session) => setEvent((e) => ({...e, raceSessions: [session].concat(e.raceSessions)})),
           nonRaceSession: (session) => setEvent((e) => ({...e, nonRaceSessions: [session].concat(e.nonRaceSessions)})),
@@ -81,14 +82,19 @@ export default ({Layout, viewEvent, exportConfiguration, navigate}) => {
       />
       <div className="event-editor">
         <div>
-          <H1 className="event-name">
-            <EditableText
-              alwaysRenderInput={true}
-              maxLength={128}
-              placeholder="Untitled event"
-              selectAllOnFocus={true}
-            />
-          </H1>
+          <span>
+            <H1 className="event-name">
+              <EditableText
+                alwaysRenderInput={true}
+                maxLength={128}
+                placeholder="Untitled event"
+                selectAllOnFocus={true}
+                defaultValue={event.name}
+                onConfirm={(name) => editEventName(eventId, name)}
+              />
+            </H1>
+          </span>
+
           <H2>Race session(s) <ButtonGroup minimal={true}>
             <Button icon="add" onClick={() => setDrawerOpen(true)}>Add</Button>
           </ButtonGroup></H2>

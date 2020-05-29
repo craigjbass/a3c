@@ -3,6 +3,10 @@
     margin-bottom: 50px;
 }
 
+.event-name > .bp3-editable-text {
+    line-height: 50px;
+}
+
 .event-editor {
     display: grid;
     grid-template-columns: 50% auto;

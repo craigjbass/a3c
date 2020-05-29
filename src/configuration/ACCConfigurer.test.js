@@ -6,7 +6,8 @@ import {
   listAvailableTracks,
   viewEvent,
   createEvent,
-  listEvents
+  listEvents,
+  updateEventName
 } from '.'
 
 const make = () => {
@@ -16,7 +17,8 @@ const make = () => {
     listAvailableTracks: listAvailableTracks(),
     viewEvent: viewEvent(configurationState),
     createEvent: createEvent(configurationState),
-    listEvents: listEvents(configurationState)
+    listEvents: listEvents(configurationState),
+    updateEventName: updateEventName(configurationState)
   }
 }
 
@@ -54,16 +56,18 @@ test('can set the track', () => {
   const {exportConfiguration, createEvent} = make()
   const {id: event_id} = createEvent({track_id: 'spa_2019'})
   let actualConfiguration = undefined
+  let eventName = undefined
   const presenter = {
-    configurationFiles: (configuration) => {
+    configurationFiles: (configuration, _eventName) => {
       actualConfiguration = configuration
+      eventName = _eventName
     }
   }
   exportConfiguration({event_id}, presenter);
 
   expect(actualConfiguration['event.json']['track']).toBe('spa_2019')
   expect(actualConfiguration['event.json']['metaData']).toBe('spa_2019')
-
+  expect(eventName).toBe('Untitled')
 })
 
 test('can list available tracks', () => {
@@ -225,4 +229,46 @@ test('can display correct track when viewing event', () => {
       variant_name: '2018'
     }
   )
+})
+
+test('can update event name', () => {
+  const {createEvent, viewEvent, listEvents, updateEventName, exportConfiguration} = make()
+  const {id} = createEvent({track_id: 'brands_hatch'})
+  updateEventName({id, name: "My Great Event"})
+
+  let eventName = undefined
+  const sessionPresenter = {
+    raceSession: (session) => {
+    },
+    nonRaceSession: (session) => {
+    },
+    track: (track) => {
+
+    },
+    notFound: () => {
+    },
+    done: (_eventName) => eventName = _eventName
+  }
+  viewEvent({id}, sessionPresenter)
+
+  let events = []
+  let done = false
+  const presenter = {
+    event: (event) => events.push(event),
+    done: () => done = true
+  }
+  listEvents({}, presenter)
+
+  let exportEventName = undefined
+  const exportPresenter = {
+    configurationFiles: (_, _eventName) => {
+      exportEventName = _eventName
+    }
+  }
+  exportConfiguration({event_id: id}, exportPresenter);
+
+  expect(eventName).toBe('My Great Event')
+  expect(events[0].name).toBe('My Great Event')
+  expect(exportEventName).toBe('My Great Event')
+
 })

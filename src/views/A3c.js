@@ -4,7 +4,7 @@ import _TrackSelectionPage from "./pages/TrackSelectionPage";
 import _EventCreatorPage from './pages/EventCreatorPage';
 import _EventListPage from './pages/EventListPage';
 import _ConfigPreviewPage from './pages/ConfigPreviewPage';
-import {listAvailableTracks, createEvent, viewEvent, listEvents, exportConfiguration} from "../configuration";
+import {listAvailableTracks, createEvent, viewEvent, listEvents, exportConfiguration, updateEventName} from "../configuration";
 import saveAsZip from "../presenter/saveAsZip";
 import ConfigurationState from "../configuration/ConfigurationState";
 
@@ -35,6 +35,7 @@ export default ({navigate, Router}) => {
       Layout: DefaultLayout,
       navigate,
       viewEvent: viewEvent(configurationState),
+      updateEventName: updateEventName(configurationState),
       exportConfiguration: (params) => exportConfiguration(configurationState)({...params}, saveAsZip)
     }
   )
