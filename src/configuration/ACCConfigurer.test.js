@@ -1,28 +1,9 @@
-import ConfigurationState from './ConfigurationState'
 import expectedDefaults from './_tests/defaults'
 import expectedTracks from "./_tests/expectedTracks";
-import {
-  exportConfiguration,
-  listAvailableTracks,
-  viewEvent,
-  createEvent,
-  listEvents,
-  updateEventName,
-  deleteEvent
-} from '.'
-
-const make = () => {
-  const configurationState = new ConfigurationState()
-  return {
-    exportConfiguration: exportConfiguration(configurationState),
-    listAvailableTracks: listAvailableTracks(),
-    viewEvent: viewEvent(configurationState),
-    createEvent: createEvent(configurationState),
-    listEvents: listEvents(configurationState),
-    updateEventName: updateEventName(configurationState),
-    deleteEvent: deleteEvent(configurationState)
-  }
-}
+import {ViewEventPresenterSpy} from "./presenterTestDoubles/ViewEventPresenterSpy";
+import {ListEventsPresenterSpy} from "./presenterTestDoubles/ListEventsPresenterSpy";
+import {ExportConfigurationPresenterSpy} from "./presenterTestDoubles/ExportConfigurationPresenterSpy";
+import { make } from '../main'
 
 const expectDotJsonFileToMatchDefaults = (dotJsonFileName, actualConfiguration) => {
   expect(actualConfiguration[dotJsonFileName]).toStrictEqual(expectedDefaults[dotJsonFileName])
@@ -35,12 +16,7 @@ beforeEach(() => {
 test('can view default configuration', () => {
   const {exportConfiguration, createEvent} = make()
   const {id: event_id} = createEvent({track_id: 'mount_panorama_2019'})
-  let actualConfiguration = undefined
-  const presenter = {
-    configurationFiles: (configuration) => {
-      actualConfiguration = configuration
-    }
-  }
+  const presenter = new ExportConfigurationPresenterSpy()
   exportConfiguration({event_id}, presenter);
   [
     'configuration.json',
@@ -50,26 +26,21 @@ test('can view default configuration', () => {
     'assistRules.json'
   ].forEach(
     (dotJsonFileName) =>
-      expectDotJsonFileToMatchDefaults(dotJsonFileName, actualConfiguration)
+      expectDotJsonFileToMatchDefaults(dotJsonFileName, presenter.configuration)
   )
 });
 
 test('can set the track', () => {
   const {exportConfiguration, createEvent} = make()
   const {id: event_id} = createEvent({track_id: 'spa_2019'})
-  let actualConfiguration = undefined
-  let eventName = undefined
-  const presenter = {
-    configurationFiles: (configuration, _eventName) => {
-      actualConfiguration = configuration
-      eventName = _eventName
-    }
-  }
+  const presenter = new ExportConfigurationPresenterSpy()
+
   exportConfiguration({event_id}, presenter);
 
+  const actualConfiguration = presenter.configuration
   expect(actualConfiguration['event.json']['track']).toBe('spa_2019')
   expect(actualConfiguration['event.json']['metaData']).toBe('spa_2019')
-  expect(eventName).toBe('Untitled')
+  expect(presenter.eventName).toBe('Untitled')
 })
 
 test('can list available tracks', () => {
@@ -87,45 +58,27 @@ test('can delete event', () => {
 
   deleteEvent({id})
 
-  let notFound = false
-  const sessionPresenter = {
-    notFound: () => notFound = true
-  }
+  const sessionPresenter = new ViewEventPresenterSpy()
   viewEvent({id}, sessionPresenter)
 
-  expect(notFound).toBe(true)
+  expect(sessionPresenter.wasNotFound).toBe(true)
 })
 
 test('cannot view an event that does not exist', () => {
   const {viewEvent} = make()
-  let wasCalled = false
-  const sessionPresenter = {
-    notFound: () => wasCalled = true
-  }
+  const sessionPresenter = new ViewEventPresenterSpy()
   viewEvent({id: "fake-id"}, sessionPresenter)
-
-  expect(wasCalled).toBe(true)
+  expect(sessionPresenter.wasNotFound).toBe(true)
 })
 
 test('can create a new event', () => {
   const {createEvent, viewEvent} = make()
   const {id} = createEvent({track_id: 'kyalami_2019'})
 
-  const raceSessions = []
-  const nonRaceSessions = []
-  let track = undefined
-  let wasCalled = false
-  let isDone = false
-  const sessionPresenter = {
-    raceSession: (session) => raceSessions.push(session),
-    nonRaceSession: (session) => nonRaceSessions.push(session),
-    track: (_track) => track = _track,
-    notFound: () => wasCalled = true,
-    done: () => isDone = true
-  }
+  const sessionPresenter = new ViewEventPresenterSpy()
   viewEvent({id}, sessionPresenter)
 
-  expect(track).toStrictEqual(
+  expect(sessionPresenter._track).toStrictEqual(
     {
       id: "kyalami_2019",
       name: "Kyalami Grand Prix Circuit",
@@ -134,8 +87,8 @@ test('can create a new event', () => {
       variant_name: '2019'
     }
   )
-  expect(wasCalled).toBe(false)
-  expect(raceSessions[0]).toStrictEqual(
+  expect(sessionPresenter.wasNotFound).toBe(false)
+  expect(sessionPresenter.raceSessions[0]).toStrictEqual(
     {
       startAt: '18:00',
       startOn: 'Saturday',
@@ -145,7 +98,7 @@ test('can create a new event', () => {
     }
   )
 
-  expect(nonRaceSessions[0]).toStrictEqual(
+  expect(sessionPresenter.nonRaceSessions[0]).toStrictEqual(
     {
       startAt: '06:00',
       startOn: 'Friday',
@@ -155,7 +108,7 @@ test('can create a new event', () => {
       type: 'Practice'
     }
   )
-  expect(nonRaceSessions[1]).toStrictEqual(
+  expect(sessionPresenter.nonRaceSessions[1]).toStrictEqual(
     {
       startAt: '12:00',
       startOn: 'Friday',
@@ -165,8 +118,10 @@ test('can create a new event', () => {
       type: 'Qualifying'
     }
   )
-  expect(isDone).toBe(true)
+  expect(sessionPresenter.isDone).toBe(true)
 })
+
+
 
 test('can list all events', () => {
   const {createEvent, listEvents} = make()
@@ -175,23 +130,18 @@ test('can list all events', () => {
   const {id: id2} = createEvent({track_id: 'kyalami_2019'})
   const {id: id3} = createEvent({track_id: 'kyalami_2019'})
 
-  let events = []
-  let done = false
-  const presenter = {
-    event: (event) => events.push(event),
-    done: () => done = true
-  }
+  const presenter = new ListEventsPresenterSpy()
 
   listEvents({}, presenter)
 
-  expect(events).toStrictEqual(
+  expect(presenter.events).toStrictEqual(
     [
       {id: id1, name: 'untitled', track_name: 'Kyalami'},
       {id: id2, name: 'untitled', track_name: 'Kyalami'},
       {id: id3, name: 'untitled', track_name: 'Kyalami'}
     ]
   )
-  expect(done).toBe(true)
+  expect(presenter.isDone).toBe(true)
 })
 
 test('can create events for different tracks', () => {
@@ -201,44 +151,29 @@ test('can create events for different tracks', () => {
   const {id: id2} = createEvent({track_id: 'suzuka_2019'})
   const {id: id3} = createEvent({track_id: 'zandvoort_2019'})
 
-  let events = []
-  let done = false
-  const presenter = {
-    event: (event) => events.push(event),
-    done: () => done = true
-  }
+  const presenter = new ListEventsPresenterSpy()
 
   listEvents({}, presenter)
 
-  expect(events).toStrictEqual(
+  expect(presenter.events).toStrictEqual(
     [
       {id: id1, name: 'untitled', track_name: 'Kyalami'},
       {id: id2, name: 'untitled', track_name: 'Suzuka'},
       {id: id3, name: 'untitled', track_name: 'Zandvoort'}
     ]
   )
-  expect(done).toBe(true)
+  expect(presenter.isDone).toBe(true)
 })
 
 test('can display correct track when viewing event', () => {
   const {createEvent, viewEvent} = make()
   const {id} = createEvent({track_id: 'brands_hatch'})
 
-  let track = undefined
-  const sessionPresenter = {
-    raceSession: (session) => {
-    },
-    nonRaceSession: (session) => {
-    },
-    track: (_track) => track = _track,
-    notFound: () => {
-    },
-    done: () => {
-    }
-  }
+  const sessionPresenter = new ViewEventPresenterSpy()
+
   viewEvent({id}, sessionPresenter)
 
-  expect(track).toStrictEqual(
+  expect(sessionPresenter._track).toStrictEqual(
     {
       id: "brands_hatch",
       name: "Brands Hatch Circuit",
@@ -254,39 +189,17 @@ test('can update event name', () => {
   const {id} = createEvent({track_id: 'brands_hatch'})
   updateEventName({id, name: "My Great Event"})
 
-  let eventName = undefined
-  const sessionPresenter = {
-    raceSession: (session) => {
-    },
-    nonRaceSession: (session) => {
-    },
-    track: (track) => {
-
-    },
-    notFound: () => {
-    },
-    done: (_eventName) => eventName = _eventName
-  }
+  const sessionPresenter = new ViewEventPresenterSpy()
   viewEvent({id}, sessionPresenter)
 
-  let events = []
-  let done = false
-  const presenter = {
-    event: (event) => events.push(event),
-    done: () => done = true
-  }
+  const presenter = new ListEventsPresenterSpy()
   listEvents({}, presenter)
 
-  let exportEventName = undefined
-  const exportPresenter = {
-    configurationFiles: (_, _eventName) => {
-      exportEventName = _eventName
-    }
-  }
-  exportConfiguration({event_id: id}, exportPresenter);
+  const exportPresenter = new ExportConfigurationPresenterSpy()
+  exportConfiguration({event_id: id}, exportPresenter)
 
-  expect(eventName).toBe('My Great Event')
-  expect(events[0].name).toBe('My Great Event')
-  expect(exportEventName).toBe('My Great Event')
+  expect(sessionPresenter.eventName).toBe('My Great Event')
+  expect(presenter.events[0].name).toBe('My Great Event')
+  expect(exportPresenter.eventName).toBe('My Great Event')
 
 })

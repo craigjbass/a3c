@@ -4,20 +4,18 @@ import _TrackSelectionPage from "./pages/TrackSelectionPage";
 import _EventCreatorPage from './pages/EventCreatorPage';
 import _EventListPage from './pages/EventListPage';
 import _ConfigPreviewPage from './pages/ConfigPreviewPage';
-import saveAsZip from "../presenter/saveAsZip";
-import ConfigurationState from "../configuration/ConfigurationState";
-import {
-  listAvailableTracks,
-  createEvent,
-  viewEvent,
-  listEvents,
-  exportConfiguration,
-  updateEventName,
-  deleteEvent
-} from "../configuration";
+import saveAsZipPresenter from "../presenter/saveAsZip";
 
-export default ({navigate, Router}) => {
-  const configurationState = new ConfigurationState()
+export default ({navigate, Router, make}) => {
+  const {
+    createEvent,
+    viewEvent,
+    listAvailableTracks,
+    listEvents,
+    exportConfiguration,
+    updateEventName,
+    deleteEvent
+  } = make()
 
   const DefaultLayout = _DefaultLayout({navigate})
 
@@ -25,8 +23,8 @@ export default ({navigate, Router}) => {
     {
       Layout: DefaultLayout,
       navigate,
-      createEvent: createEvent(configurationState),
-      listAvailableTracks: listAvailableTracks()
+      createEvent,
+      listAvailableTracks
     }
   )
 
@@ -34,7 +32,7 @@ export default ({navigate, Router}) => {
     {
       Layout: DefaultLayout,
       navigate,
-      listEvents: listEvents(configurationState)
+      listEvents
     }
   )
 
@@ -42,10 +40,10 @@ export default ({navigate, Router}) => {
     {
       Layout: DefaultLayout,
       navigate,
-      viewEvent: viewEvent(configurationState),
-      updateEventName: updateEventName(configurationState),
-      deleteEvent: deleteEvent(configurationState),
-      exportConfiguration: (params) => exportConfiguration(configurationState)({...params}, saveAsZip)
+      viewEvent: viewEvent,
+      updateEventName: updateEventName,
+      deleteEvent: deleteEvent,
+      exportConfiguration: (params) => exportConfiguration({...params}, saveAsZipPresenter)
     }
   )
 
@@ -53,7 +51,7 @@ export default ({navigate, Router}) => {
     {
       Layout: DefaultLayout,
       navigate,
-      exportConfiguration: exportConfiguration(configurationState)
+      exportConfiguration: exportConfiguration
     }
   )
 
