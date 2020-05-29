@@ -19,8 +19,10 @@ import {
 
 import './EventCreatorPage.css'
 
-export default ({Layout, viewEvent, navigate}) =>
-  ({trackId}) => {
+export default ({Layout, viewEvent, exportConfiguration, navigate}) => {
+  const download = (event_id) => exportConfiguration({event_id})
+
+  return ({trackId: eventId}) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [event, setEvent] = useState({state: undefined, raceSessions: [], nonRaceSessions: []})
 
@@ -31,7 +33,7 @@ export default ({Layout, viewEvent, navigate}) =>
 
       setEvent((e) => ({...e, state: 'loading'}))
       viewEvent(
-        {id: trackId},
+        {id: eventId},
         {
           notFound: () => setEvent((e) => ({...e, state: 'not-found'})),
           done: () => setEvent((e) => ({...e, state: 'done'})),
@@ -40,7 +42,7 @@ export default ({Layout, viewEvent, navigate}) =>
           nonRaceSession: (session) => setEvent((e) => ({...e, nonRaceSessions: [session].concat(e.nonRaceSessions)})),
         }
       )
-    }, [event, trackId])
+    }, [event, eventId])
 
 
     if ([undefined, 'loading'].includes(event.state)) return <Layout>
@@ -58,7 +60,12 @@ export default ({Layout, viewEvent, navigate}) =>
                      }/>
     </Layout>
 
-    return <Layout>
+    return <Layout contextual={
+      <Button icon="cloud-download"
+              onClick={() => download(eventId)}>
+        Export configuration
+      </Button>
+    }>
       <Breadcrumbs
         items={[
           {icon: "list", text: "Choose track"},
@@ -110,4 +117,5 @@ export default ({Layout, viewEvent, navigate}) =>
       </div>
       <Drawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)}/>
     </Layout>;
-  }
+  };
+}

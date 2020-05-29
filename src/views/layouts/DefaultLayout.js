@@ -1,9 +1,9 @@
 import React from 'react';
 import './DefaultLayout.css';
-import {Navbar, Button, Alignment, Intent} from "@blueprintjs/core";
+import {Navbar, Button, Alignment, Intent, ButtonGroup} from "@blueprintjs/core";
 
 export default ({navigate}) =>
-  ({children}) => (<>
+  ({children, contextual=<React.Fragment />}) => (<>
     <Navbar>
       <Navbar.Group align={Alignment.LEFT}>
         <Navbar.Heading>A3C</Navbar.Heading>
@@ -13,9 +13,12 @@ export default ({navigate}) =>
                 text="Event list"
                 onClick={() => navigate("/events")}/>
         <Navbar.Divider/>
-        <Button intent={Intent.PRIMARY}
-                text="Create"
-                onClick={() => navigate("/")}/>
+        <ButtonGroup>
+          <Button intent={Intent.PRIMARY}
+                  text="Create"
+                  onClick={() => navigate("/")}/>
+          {contextual}
+        </ButtonGroup>
       </Navbar.Group>
     </Navbar>
     <div className="app-frame">

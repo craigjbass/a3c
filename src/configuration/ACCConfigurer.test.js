@@ -29,8 +29,15 @@ beforeEach(() => {
 })
 
 test('can view default configuration', () => {
-  const {exportConfiguration} = make()
-  const actualConfiguration = exportConfiguration();
+  const {exportConfiguration, createEvent} = make()
+  const {id: event_id} = createEvent({track_id: 'mount_panorama_2019'})
+  let actualConfiguration = undefined
+  const presenter = {
+    configurationFiles: (configuration) => {
+      actualConfiguration = configuration
+    }
+  }
+  exportConfiguration({event_id}, presenter);
   [
     'configuration.json',
     'settings.json',
@@ -180,11 +187,15 @@ test('can display correct track when viewing event', () => {
 
   let track = undefined
   const sessionPresenter = {
-    raceSession: (session) => {},
-    nonRaceSession: (session) => {},
+    raceSession: (session) => {
+    },
+    nonRaceSession: (session) => {
+    },
     track: (_track) => track = _track,
-    notFound: () => {},
-    done: () => {}
+    notFound: () => {
+    },
+    done: () => {
+    }
   }
   viewEvent({id}, sessionPresenter)
 
