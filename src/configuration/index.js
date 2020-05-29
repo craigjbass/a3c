@@ -76,3 +76,6 @@ export const listEvents = (configurationState) =>
 
 export const updateEventName = (configurationState) =>
   ({id, name}) => configurationState.update(id, (event) => ({...event, name}))
+
+export const deleteEvent = (configurationState) =>
+  ({id}) => configurationState.delete(id)

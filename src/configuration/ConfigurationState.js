@@ -26,4 +26,7 @@ export default class ConfigurationState {
         const newEvent = fn(event)
         localStorage.setItem(id, JSON.stringify(newEvent))
     }
+    delete = (id) => {
+        localStorage.removeItem(id)
+    }
 }

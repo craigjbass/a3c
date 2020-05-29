@@ -19,8 +19,12 @@ import {
 
 import './EventCreatorPage.css'
 
-export default ({Layout, viewEvent, exportConfiguration, updateEventName, navigate}) => {
+export default ({Layout, viewEvent, exportConfiguration, updateEventName, deleteEvent, navigate}) => {
   const download = (eventId) => exportConfiguration({event_id: eventId})
+  const delet3 = (id) => {
+    deleteEvent({id})
+    navigate(`/events/`)
+  }
   const preview = (eventId) => navigate(`/events/${eventId}/preview`)
   const editEventName = (id, name) => updateEventName({id, name})
 
@@ -64,6 +68,10 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, naviga
 
     return <Layout contextual={
       <>
+        <Button intent={Intent.DANGER}
+                onClick={() => delet3(eventId)}>
+          Delete
+        </Button>
         <Button icon="cloud-download"
                 onClick={() => download(eventId)}>
           Export

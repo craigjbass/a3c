@@ -7,7 +7,8 @@ import {
   viewEvent,
   createEvent,
   listEvents,
-  updateEventName
+  updateEventName,
+  deleteEvent
 } from '.'
 
 const make = () => {
@@ -18,7 +19,8 @@ const make = () => {
     viewEvent: viewEvent(configurationState),
     createEvent: createEvent(configurationState),
     listEvents: listEvents(configurationState),
-    updateEventName: updateEventName(configurationState)
+    updateEventName: updateEventName(configurationState),
+    deleteEvent: deleteEvent(configurationState)
   }
 }
 
@@ -76,6 +78,22 @@ test('can list available tracks', () => {
   expect(availableTracks).toStrictEqual(
     {tracks: expectedTracks}
   )
+})
+
+test('can delete event', () => {
+  const {createEvent, deleteEvent, viewEvent} = make()
+
+  const {id} = createEvent({track_id: 'kyalami_2019'})
+
+  deleteEvent({id})
+
+  let notFound = false
+  const sessionPresenter = {
+    notFound: () => notFound = true
+  }
+  viewEvent({id}, sessionPresenter)
+
+  expect(notFound).toBe(true)
 })
 
 test('cannot view an event that does not exist', () => {
