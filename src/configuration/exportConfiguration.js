@@ -1,5 +1,6 @@
 export default (configurationState) =>
   ({event_id}, presenter) => {
+    const event = configurationState.getEvent(event_id)
     const configuration = {
       "udpPort": 9231,
       "tcpPort": 9232,
@@ -18,8 +19,8 @@ export default (configurationState) =>
       "shortFormationLap": 1,
       "formationLapType": 3,
       "centralEntryListPath": "",
-      "track": "mount_panorama_2019",
-      "metaData": "mount_panorama_2019",
+      "track": event.track_id,
+      "metaData": event.track_id,
       "eventType": "E_6h",
       "preRaceWaitingTimeSeconds": 80,
       "postQualySeconds": 10,

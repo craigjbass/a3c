@@ -50,6 +50,22 @@ test('can view default configuration', () => {
   )
 });
 
+test('can set the track', () => {
+  const {exportConfiguration, createEvent} = make()
+  const {id: event_id} = createEvent({track_id: 'spa_2019'})
+  let actualConfiguration = undefined
+  const presenter = {
+    configurationFiles: (configuration) => {
+      actualConfiguration = configuration
+    }
+  }
+  exportConfiguration({event_id}, presenter);
+
+  expect(actualConfiguration['event.json']['track']).toBe('spa_2019')
+  expect(actualConfiguration['event.json']['metaData']).toBe('spa_2019')
+
+})
+
 test('can list available tracks', () => {
   const {listAvailableTracks} = make()
   const availableTracks = listAvailableTracks()
