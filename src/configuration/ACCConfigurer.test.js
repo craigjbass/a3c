@@ -30,7 +30,7 @@ test('can view default configuration', () => {
   )
 });
 
-test('can sets event overtime as 15% more than real world record.', () => {
+test('sets event overtime as 15% more than real world record.', () => {
   const {exportConfiguration, createEvent} = make()
   const {id: event_id} = createEvent({track_id: 'spa_2019'})
   const presenter = new ExportConfigurationPresenterSpy()
@@ -39,6 +39,17 @@ test('can sets event overtime as 15% more than real world record.', () => {
 
   const actualConfiguration = presenter.configuration
   expect(actualConfiguration['event.json']['sessionOverTimeSeconds']).toBe(159)
+})
+
+test('sets temperature based on defaults.', () => {
+  const {exportConfiguration, createEvent} = make()
+  const {id: event_id} = createEvent({track_id: 'spa_2019'})
+  const presenter = new ExportConfigurationPresenterSpy()
+
+  exportConfiguration({event_id}, presenter);
+
+  const actualConfiguration = presenter.configuration
+  expect(actualConfiguration['event.json']['ambientTemp']).toBe(17.5)
 })
 
 test('can set the track', () => {
@@ -96,6 +107,11 @@ test('can create a new event', () => {
       short_name: "Kyalami",
       image_id: "Kyalami",
       variant_name: '2019'
+    }
+  )
+  expect(presenter._weather).toStrictEqual(
+    {
+      temperature: 22.0
     }
   )
   expect(presenter.wasNotFound).toBe(false)
@@ -271,6 +287,11 @@ test('can display correct track when viewing event', () => {
       short_name: "Brands Hatch",
       image_id: "BrandsHatch",
       variant_name: '2018'
+    }
+  )
+  expect(sessionPresenter._weather).toStrictEqual(
+    {
+      temperature: 14.0
     }
   )
 })

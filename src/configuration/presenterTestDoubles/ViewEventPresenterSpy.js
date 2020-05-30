@@ -5,6 +5,7 @@ export class ViewEventPresenterSpy {
     this._track = undefined
     this.wasNotFound = false
     this.isDone = false
+    this._weather = undefined
   }
 
   raceSession(session) {
@@ -17,6 +18,10 @@ export class ViewEventPresenterSpy {
 
   track(track) {
     this._track = track
+  }
+
+  weather(weather) {
+    this._weather = weather
   }
 
   notFound() {

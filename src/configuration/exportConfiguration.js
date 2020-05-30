@@ -1,4 +1,7 @@
 import tracks from "./tracks";
+import trackDefaults from "./trackDefaults";
+
+const note = (id) => id
 
 export default (configurationState) =>
   ({event_id}, presenter) => {
@@ -32,8 +35,8 @@ export default (configurationState) =>
       "postQualySeconds": 10,
       "postRaceSeconds": 15,
       "sessionOverTimeSeconds": Math.round(variant.quickest_lap * 1.15),
-      "ambientTemp": 22,
-      "trackTemp": 30,
+      "ambientTemp": trackDefaults[track.id].temperature,
+      "trackTemp": note(30, 'Obsolete: Track temperatures are always simulated based on ambient temperature, sun angle, clouds and other aspects'),
       "cloudLevel": 0.1,
       "rain": 0,
       "weatherRandomness": 1,

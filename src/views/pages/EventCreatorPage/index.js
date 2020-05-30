@@ -50,6 +50,7 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
           track: (track) => setEvent((e) => ({...e, track})),
           raceSession: (session) => setEvent((e) => ({...e, raceSessions: [session].concat(e.raceSessions)})),
           nonRaceSession: (session) => setEvent((e) => ({...e, nonRaceSessions: [session].concat(e.nonRaceSessions)})),
+          weather: (weather) => setEvent((e) => ({...e, weather: weather}))
         }
       )
     }, [event, eventId])
@@ -123,7 +124,7 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                                                        setEvent(initialState)
                                                        deleteSession(session.id, eventId);
                                                      }}
-                                                     minimal={true} /></H4>
+                                                     minimal={true}/></H4>
                 <p>{session.startAt}</p>
                 <p>{session.actualDuration} minutes ({session.duration} minutes @ {session.timeMultiplier}x)</p>
               </Card>
@@ -145,14 +146,18 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                                                                  setEvent(initialState)
                                                                  deleteSession(session.id, eventId);
                                                                }}
-                                                               minimal={true} />
+                                                               minimal={true}/>
                 </H4>
                 <p>{session.startAt}</p>
                 <p>{session.actualDuration} minutes</p>
               </Card>
             )}
           </div>
-
+          <H2>Weather</H2>
+          <Tag large={true}
+               round={true}>
+            {event.weather.temperature}&deg;
+          </Tag>
         </div>
         <div>
           <H1>{event.track.name}</H1>

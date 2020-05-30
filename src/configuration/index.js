@@ -1,6 +1,7 @@
 import _exportConfiguration from './exportConfiguration'
 import tracks from './tracks'
 import { v4 as uuid } from 'uuid';
+import trackDefaults from "./trackDefaults";
 
 export const exportConfiguration = _exportConfiguration
 
@@ -17,6 +18,8 @@ export const viewEvent = (configurationState) =>
     }))
 
     const variant = track.variants.find((v) => v.track_id === event.track_id)
+
+    presenter.weather({temperature: trackDefaults[track.id].temperature})
 
     presenter.track(
       {

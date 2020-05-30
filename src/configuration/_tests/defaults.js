@@ -30,7 +30,7 @@ export default {
         "postQualySeconds": 10,
         "postRaceSeconds": 15,
         "sessionOverTimeSeconds": 140,
-        "ambientTemp": 22,
+        "ambientTemp": 22.5,
         "trackTemp": 30,
         "cloudLevel": 0.1,
         "rain": 0,
