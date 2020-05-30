@@ -6,11 +6,13 @@ export default [
     variants: [
       {
         variant_name: "2018",
-        track_id: "barcelona"
+        track_id: "barcelona",
+        quickest_lap: 103.667
       },
       {
         variant_name: "2019",
-        track_id: "barcelona_2019"
+        track_id: "barcelona_2019",
+        quickest_lap: 104.598
       }
     ]
   },
@@ -21,11 +23,13 @@ export default [
     variants: [
       {
         variant_name: "2018",
-        track_id: "brands_hatch"
+        track_id: "brands_hatch",
+        quickest_lap: 83.46
       },
       {
         variant_name: "2019",
-        track_id: "brands_hatch_2019"
+        track_id: "brands_hatch_2019",
+        quickest_lap: 82.93
       }
     ]
   },
@@ -36,11 +40,13 @@ export default [
     variants: [
       {
         variant_name: "2018",
-        track_id: "hungaroring"
+        track_id: "hungaroring",
+        quickest_lap: 102.688
       },
       {
         variant_name: "2019",
-        track_id: "hungaroring_2019"
+        track_id: "hungaroring_2019",
+        quickest_lap: 102.994
       }
     ]
   },
@@ -51,7 +57,8 @@ export default [
     variants: [
       {
         variant_name: "2019",
-        track_id: "kyalami_2019"
+        track_id: "kyalami_2019",
+        quickest_lap: 102.27199999999999
       }
     ]
   },
@@ -62,7 +69,8 @@ export default [
     variants: [
       {
         variant_name: "2019",
-        track_id: "laguna_seca_2019"
+        track_id: "laguna_seca_2019",
+        quickest_lap: 84.023
       }
     ]
   },
@@ -73,11 +81,13 @@ export default [
     variants: [
       {
         variant_name: "2018",
-        track_id: "misano"
+        track_id: "misano",
+        quickest_lap: 93.212
       },
       {
         variant_name: "2019",
-        track_id: "misano_2019"
+        track_id: "misano_2019",
+        quickest_lap: 93.595
       }
     ]
   },
@@ -88,11 +98,13 @@ export default [
     variants: [
       {
         variant_name: "2018",
-        track_id: "monza"
+        track_id: "monza",
+        quickest_lap: 107.842
       },
       {
         variant_name: "2019",
-        track_id: "monza_2019"
+        track_id: "monza_2019",
+        quickest_lap: 107.645
       }
     ]
   },
@@ -103,7 +115,8 @@ export default [
     variants: [
       {
         variant_name: "2019",
-        track_id: "mount_panorama_2019"
+        track_id: "mount_panorama_2019",
+        quickest_lap: 121.5669
       }
     ]
   },
@@ -114,11 +127,13 @@ export default [
     variants: [
       {
         variant_name: "2018",
-        track_id: "nurburgring"
+        track_id: "nurburgring",
+        quickest_lap: 114.007
       },
       {
         variant_name: "2019",
-        track_id: "nurburgring_2019"
+        track_id: "nurburgring_2019",
+        quickest_lap: 114.439
       }
     ]
   },
@@ -129,11 +144,13 @@ export default [
     variants: [
       {
         variant_name: "2018",
-        track_id: "paul_ricard"
+        track_id: "paul_ricard",
+        quickest_lap: 114.153
       },
       {
         variant_name: "2019",
-        track_id: "paul_ricard_2019"
+        track_id: "paul_ricard_2019",
+        quickest_lap: 112.6709
       }
     ]
   },
@@ -144,11 +161,13 @@ export default [
     variants: [
       {
         variant_name: "2018",
-        track_id: "silverstone"
+        track_id: "silverstone",
+        quickest_lap: 116.637
       },
       {
         variant_name: "2019",
-        track_id: "silverstone_2019"
+        track_id: "silverstone_2019",
+        quickest_lap: 118.89
       }
     ]
   },
@@ -159,11 +178,13 @@ export default [
     variants: [
       {
         variant_name: "2018",
-        track_id: "spa"
+        track_id: "spa",
+        quickest_lap: 138.578
       },
       {
         variant_name: "2019",
-        track_id: "spa_2019"
+        track_id: "spa_2019",
+        quickest_lap: 138.588
       }
     ]
   },
@@ -174,7 +195,8 @@ export default [
     variants: [
       {
         variant_name: "2019",
-        track_id: "suzuka_2019"
+        track_id: "suzuka_2019",
+        quickest_lap: 123.6109
       }
     ]
   },
@@ -185,11 +207,13 @@ export default [
     variants: [
       {
         variant_name: "2018",
-        track_id: "zandvoort"
+        track_id: "zandvoort",
+        quickest_lap: 95.636
       },
       {
         variant_name: "2019",
-        track_id: "zandvoort_2019"
+        track_id: "zandvoort_2019",
+        quickest_lap: 95.636
       }
     ]
   },
@@ -200,11 +224,13 @@ export default [
     variants: [
       {
         variant_name: "2018",
-        track_id: "zolder"
+        track_id: "zolder",
+        quickest_lap: 88.363
       },
       {
         variant_name: "2019",
-        track_id: "zolder_2019"
+        track_id: "zolder_2019",
+        quickest_lap: 88.363
       }
     ]
   }

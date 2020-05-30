@@ -1,6 +1,12 @@
+import tracks from "./tracks";
+
 export default (configurationState) =>
   ({event_id}, presenter) => {
     const event = configurationState.getEvent(event_id)
+    const track = tracks.find((value => {
+      return value.variants.find((variant) => variant.track_id === event.track_id) !== undefined
+    }))
+    const variant = track.variants.find((v) => v.track_id === event.track_id)
     const configuration = {
       "udpPort": 9231,
       "tcpPort": 9232,
@@ -25,7 +31,7 @@ export default (configurationState) =>
       "preRaceWaitingTimeSeconds": 80,
       "postQualySeconds": 10,
       "postRaceSeconds": 15,
-      "sessionOverTimeSeconds": 120,
+      "sessionOverTimeSeconds": Math.round(variant.quickest_lap * 1.15),
       "ambientTemp": 22,
       "trackTemp": 30,
       "cloudLevel": 0.1,

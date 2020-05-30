@@ -29,7 +29,7 @@ export default {
         "preRaceWaitingTimeSeconds": 80,
         "postQualySeconds": 10,
         "postRaceSeconds": 15,
-        "sessionOverTimeSeconds": 120,
+        "sessionOverTimeSeconds": 140,
         "ambientTemp": 22,
         "trackTemp": 30,
         "cloudLevel": 0.1,

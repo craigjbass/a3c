@@ -30,6 +30,17 @@ test('can view default configuration', () => {
   )
 });
 
+test('can sets event overtime as 15% more than real world record.', () => {
+  const {exportConfiguration, createEvent} = make()
+  const {id: event_id} = createEvent({track_id: 'spa_2019'})
+  const presenter = new ExportConfigurationPresenterSpy()
+
+  exportConfiguration({event_id}, presenter);
+
+  const actualConfiguration = presenter.configuration
+  expect(actualConfiguration['event.json']['sessionOverTimeSeconds']).toBe(159)
+})
+
 test('can set the track', () => {
   const {exportConfiguration, createEvent} = make()
   const {id: event_id} = createEvent({track_id: 'spa_2019'})
