@@ -115,7 +115,15 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                                                        interactive={true}
                                                        onClick={() => setDrawerOpen(true)}
                                                        className="sessions_Session">
-                <H4>Race ({session.startOn})</H4>
+                <H4>Race ({session.startOn}) <Button icon="trash"
+                                                     disabled={event.raceSessions.length < 2}
+                                                     intent={Intent.DANGER}
+                                                     onClick={(e) => {
+                                                       e.stopPropagation()
+                                                       setEvent(initialState)
+                                                       deleteSession(session.id, eventId);
+                                                     }}
+                                                     minimal={true} /></H4>
                 <p>{session.startAt}</p>
                 <p>{session.actualDuration} minutes ({session.duration} minutes @ {session.timeMultiplier}x)</p>
               </Card>
@@ -130,6 +138,7 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                                                           onClick={() => setDrawerOpen(true)}
                                                           className="sessions_Session">
                 <H4>{session.type} ({session.startOn}) <Button icon="trash"
+                                                               disabled={event.nonRaceSessions.length < 2}
                                                                intent={Intent.DANGER}
                                                                onClick={(e) => {
                                                                  e.stopPropagation()

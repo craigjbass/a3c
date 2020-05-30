@@ -135,6 +135,49 @@ test('can create a new event', () => {
   expect(presenter.isDone).toBe(true)
 })
 
+test('can not delete the last of session of an event', () => {
+  const {createEvent, deleteSessionFromEvent, exportConfiguration, viewEvent} = make()
+  const {id} = createEvent({track_id: 'kyalami_2019'})
+
+  let presenter = new ViewEventPresenterSpy()
+  viewEvent({id}, presenter)
+
+  deleteSessionFromEvent({eventId: id, sessionId: presenter.raceSessions[0].id})
+
+  presenter = new ViewEventPresenterSpy()
+  viewEvent({id}, presenter)
+
+  expect(presenter.raceSessions.length).toBe(1)
+
+  const presenter2 = new ExportConfigurationPresenterSpy()
+  exportConfiguration({event_id: id}, presenter2);
+
+  const actualConfiguration = presenter2.configuration
+  expect(actualConfiguration['event.json']['sessions']).toStrictEqual([
+    {
+      "dayOfWeekend": 1,
+      "hourOfDay": 6,
+      "sessionDurationMinutes": 10,
+      "sessionType": "P",
+      "timeMultiplier": 1,
+    },
+    {
+      "dayOfWeekend": 1,
+      "hourOfDay": 12,
+      "sessionDurationMinutes": 10,
+      "sessionType": "Q",
+      "timeMultiplier": 1,
+    },
+    {
+      "dayOfWeekend": 2,
+      "hourOfDay": 18,
+      "sessionDurationMinutes": 20,
+      "sessionType": "R",
+      "timeMultiplier": 2,
+    }
+  ])
+})
+
 test('can delete a non race session', () => {
   const {createEvent, deleteSessionFromEvent, exportConfiguration, viewEvent} = make()
   const {id} = createEvent({track_id: 'kyalami_2019'})

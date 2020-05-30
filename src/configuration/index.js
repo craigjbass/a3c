@@ -91,10 +91,14 @@ export const deleteEvent = (configurationState) =>
 
 export const deleteSessionFromEvent = (configurationState) => {
   return ({eventId, sessionId}) => {
-    configurationState.update(eventId, event => ({
-      ...event,
-      nonRaceSessions: event.nonRaceSessions.filter(s => s.id !== sessionId),
-      raceSessions: event.raceSessions.filter(s => s.id !== sessionId)
-    }))
+    configurationState.update(eventId, event => {
+      let nonRaceSessions = event.nonRaceSessions.filter(s => s.id !== sessionId);
+      let raceSessions = event.raceSessions.filter(s => s.id !== sessionId);
+      return ({
+        ...event,
+        nonRaceSessions: nonRaceSessions.length > 0 ? nonRaceSessions : event.nonRaceSessions,
+        raceSessions: raceSessions.length > 0 ? raceSessions : event.raceSessions
+      });
+    })
   };
 }
