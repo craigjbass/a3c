@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {AnchorButton, Button, ButtonGroup, HTMLTable, Intent, NonIdealState, Spinner} from "@blueprintjs/core";
+import {AnchorButton, Button, HTMLTable, Intent, NonIdealState, Spinner} from "@blueprintjs/core";
 
 export default ({Layout, navigate, listEvents}) =>
   () => {

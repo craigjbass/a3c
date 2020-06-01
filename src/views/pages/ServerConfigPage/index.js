@@ -1,5 +1,5 @@
 import React from 'react'
-import {FormGroup, H1, InputGroup, NumericInput, Switch} from "@blueprintjs/core";
+import {FormGroup, H1, InputGroup, NumericInput} from "@blueprintjs/core";
 
 export default ({Layout}) => () => <Layout>
   <H1>Server settings</H1>
