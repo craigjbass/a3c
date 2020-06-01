@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {AnchorButton, HTMLTable, Intent, NonIdealState, Spinner} from "@blueprintjs/core";
+import {AnchorButton, Button, ButtonGroup, HTMLTable, Intent, NonIdealState, Spinner} from "@blueprintjs/core";
 
 export default ({Layout, navigate, listEvents}) =>
   () => {
@@ -17,11 +17,11 @@ export default ({Layout, navigate, listEvents}) =>
 
     }, [events])
 
-    if(events === undefined) return <Layout>
-      <Spinner />
+    if (events === undefined) return <Layout>
+      <Spinner/>
     </Layout>
 
-    if(events.length === 0) return <Layout>
+    if (events.length === 0) return <Layout>
       <NonIdealState title="You haven't created any events."
                      icon="heart-broken"
                      action={
@@ -32,7 +32,9 @@ export default ({Layout, navigate, listEvents}) =>
                      }/>
     </Layout>
 
-    return <Layout>
+    return <Layout contextual={<Button intent={Intent.PRIMARY}
+                                       text="Create"
+                                       onClick={() => navigate("/")}/>}>
       <HTMLTable interactive={true} striped={true}>
         <thead>
         <tr>
