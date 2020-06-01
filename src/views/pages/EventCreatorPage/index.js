@@ -15,7 +15,7 @@ import {
   NonIdealState,
   Intent,
   Tag,
-  Position
+  Position, H5
 } from "@blueprintjs/core";
 
 import './EventCreatorPage.css'
@@ -125,8 +125,8 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                                                        deleteSession(session.id, eventId);
                                                      }}
                                                      minimal={true}/></H4>
-                <p>{session.startAt}</p>
-                <p>{session.actualDuration} minutes ({session.duration} minutes @ {session.timeMultiplier}x)</p>
+                <p>{session.startAt} - {session.endAt}</p>
+                <p>{session.actualDuration} minutes @ {session.timeMultiplier}x</p>
               </Card>
             )}
           </div>
@@ -148,21 +148,21 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                                                                }}
                                                                minimal={true}/>
                 </H4>
-                <p>{session.startAt}</p>
-                <p>{session.actualDuration} minutes</p>
+                <p>{session.startAt} - {session.endAt}</p>
+                <p>{session.actualDuration} minutes @ {session.timeMultiplier}x</p>
               </Card>
             )}
           </div>
+        </div>
+        <div className="track-details">
+          <H1>{event.track.short_name} ({event.track.variant_name})</H1>
+          <H5>{event.track.name}</H5>
+          <img alt="" src={`/tracks/${event.track.image_id}.png`} width="100%"/>
           <H2>Weather</H2>
           <Tag large={true}
                round={true}>
             {event.weather.temperature}&deg;
           </Tag>
-        </div>
-        <div>
-          <H1>{event.track.name}</H1>
-          <Tag large={true}>{event.track.variant_name}</Tag>
-          <img alt="" src={`/tracks/${event.track.image_id}.png`} width="100%"/>
         </div>
 
       </div>

@@ -119,10 +119,10 @@ test('can create a new event', () => {
     {
       id: presenter.raceSessions[0].id,
       startAt: '18:00',
+      endAt: '18:40',
       startOn: 'Saturday',
-      duration: '20',
       timeMultiplier: '2',
-      actualDuration: '10',
+      actualDuration: '20',
     }
   )
 
@@ -130,8 +130,8 @@ test('can create a new event', () => {
     {
       id: presenter.nonRaceSessions[0].id,
       startAt: '06:00',
+      endAt: '06:10',
       startOn: 'Friday',
-      duration: '10',
       timeMultiplier: '1',
       actualDuration: '10',
       type: 'Practice'
@@ -141,8 +141,8 @@ test('can create a new event', () => {
     {
       id: presenter.nonRaceSessions[1].id,
       startAt: '12:00',
+      endAt: '12:10',
       startOn: 'Friday',
-      duration: '10',
       timeMultiplier: '1',
       actualDuration: '10',
       type: 'Qualifying'

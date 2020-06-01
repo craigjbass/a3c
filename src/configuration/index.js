@@ -44,8 +44,8 @@ export const createEvent = (configurationState) =>
         {
           id: uuid(),
           startAt: '06:00',
+          endAt: '06:10',
           startOn: 'Friday',
-          duration: '10',
           timeMultiplier: '1',
           actualDuration: '10',
           type: 'Practice'
@@ -53,8 +53,8 @@ export const createEvent = (configurationState) =>
         {
           id: uuid(),
           startAt: '12:00',
+          endAt: '12:10',
           startOn: 'Friday',
-          duration: '10',
           timeMultiplier: '1',
           actualDuration: '10',
           type: 'Qualifying'
@@ -64,10 +64,10 @@ export const createEvent = (configurationState) =>
         {
           id: uuid(),
           startAt: '18:00',
+          endAt: '18:40',
           startOn: 'Saturday',
-          duration: '20',
           timeMultiplier: '2',
-          actualDuration: '10',
+          actualDuration: '20',
         }
       ]
     })
