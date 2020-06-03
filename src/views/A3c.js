@@ -7,72 +7,71 @@ import _ConfigPreviewPage from './pages/ConfigPreviewPage';
 import _ServerConfigPage from './pages/ServerConfigPage';
 import saveAsZipPresenter from "../presenter/saveAsZip";
 
-export default ({navigate, Router, make, LocationProvider}) => {
-    const {
-        createEvent,
-        viewEvent,
-        listAvailableTracks,
-        listEvents,
-        exportConfiguration,
-        updateEventName,
-        deleteEvent,
-        deleteSessionFromEvent
-    } = make()
+export default ({
+                  Router,
+                  navigate,
+                  quit,
+                  createEvent,
+                  viewEvent,
+                  listAvailableTracks,
+                  listEvents,
+                  exportConfiguration,
+                  updateEventName,
+                  deleteEvent,
+                  deleteSessionFromEvent
+                }) => {
+  const DefaultLayout = _DefaultLayout({navigate, quit})
 
-    const DefaultLayout = _DefaultLayout({navigate})
+  const TrackSelectionPage = _TrackSelectionPage(
+    {
+      Layout: DefaultLayout,
+      navigate,
+      createEvent,
+      listAvailableTracks
+    }
+  )
 
-    const TrackSelectionPage = _TrackSelectionPage(
-        {
-            Layout: DefaultLayout,
-            navigate,
-            createEvent,
-            listAvailableTracks
-        }
-    )
+  const EventListPage = _EventListPage(
+    {
+      Layout: DefaultLayout,
+      navigate,
+      listEvents
+    }
+  )
 
-    const EventListPage = _EventListPage(
-        {
-            Layout: DefaultLayout,
-            navigate,
-            listEvents
-        }
-    )
+  const EventCreatorPage = _EventCreatorPage(
+    {
+      Layout: DefaultLayout,
+      navigate,
+      viewEvent,
+      updateEventName,
+      deleteEvent,
+      deleteSessionFromEvent,
+      exportConfiguration: (params) => exportConfiguration({...params}, saveAsZipPresenter)
+    }
+  )
 
-    const EventCreatorPage = _EventCreatorPage(
-        {
-            Layout: DefaultLayout,
-            navigate,
-            viewEvent,
-            updateEventName,
-            deleteEvent,
-            deleteSessionFromEvent,
-            exportConfiguration: (params) => exportConfiguration({...params}, saveAsZipPresenter)
-        }
-    )
+  const ConfigPreviewPage = _ConfigPreviewPage(
+    {
+      Layout: DefaultLayout,
+      navigate,
+      exportConfiguration
+    }
+  )
 
-    const ConfigPreviewPage = _ConfigPreviewPage(
-        {
-            Layout: DefaultLayout,
-            navigate,
-            exportConfiguration
-        }
-    )
+  const ServerConfigPage = _ServerConfigPage(
+    {
+      Layout: DefaultLayout
+    }
+  )
 
-    const ServerConfigPage = _ServerConfigPage(
-        {
-            Layout: DefaultLayout
-        }
-    )
-
-    return () => <>
-        <LocationProvider>
-            <Router>
-                <TrackSelectionPage path="/"/>
-                <EventListPage path="/events"/>
-                <EventCreatorPage path="/events/:id"/>
-                <ConfigPreviewPage path="/events/:id/preview"/>
-                <ServerConfigPage path="/server-settings"/>
-            </Router>
-        </LocationProvider>
-    </>
+  return () => <>
+    <Router>
+      <TrackSelectionPage path="/"/>
+      <EventListPage path="/events"/>
+      <EventCreatorPage path="/events/:id"/>
+      <ConfigPreviewPage path="/events/:id/preview"/>
+      <ServerConfigPage path="/server-settings"/>
+    </Router>
+  </>
 }

@@ -2,18 +2,28 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import {Router, LocationProvider, createHistory, createMemorySource} from "@reach/router"
+import {Router as ReachRouter, LocationProvider, createHistory, createMemorySource} from "@reach/router"
 import _A3c from './views/A3c'
 import {make} from './makeDependencies'
 
+
+const quit = () => {
+  require('electron').remote.getCurrentWindow().close()
+}
+
 let history = createHistory(createMemorySource("/"))
 
-const _LocationProvider = ({children}) => <LocationProvider history={history}>{children}</LocationProvider>
-const A3c = _A3c({navigate: history.navigate, Router, make, LocationProvider: _LocationProvider})
+const Router = ({children}) => <LocationProvider history={history}>
+  <ReachRouter>
+    {children}
+  </ReachRouter>
+</LocationProvider>
+
+const A3c = _A3c({navigate: history.navigate, Router, quit, ...make()})
 
 ReactDOM.render(
-    <A3c/>,
-    document.getElementById('root')
+  <A3c/>,
+  document.getElementById('root')
 );
 
 serviceWorker.unregister();
