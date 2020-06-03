@@ -15,7 +15,7 @@ const ContextualItems = ({contextual}) => {
 }
 
 export default ({navigate}) => ({children, contextual}) => (<>
-  <Navbar>
+  <Navbar fixedToTop={true}>
     <Navbar.Group align={Alignment.LEFT}>
       <Navbar.Heading>A3C</Navbar.Heading>
       <Button minimal={true}

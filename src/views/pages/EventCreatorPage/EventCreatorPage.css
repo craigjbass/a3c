@@ -11,6 +11,7 @@
 .track-details img {
     max-height: 40%;
     width: auto;
+    max-width: 100%;
 }
 
 .event-name > .bp3-editable-text {

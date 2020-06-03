@@ -3,7 +3,7 @@ import expectedTracks from "./_tests/expectedTracks";
 import {ViewEventPresenterSpy} from "./presenterTestDoubles/ViewEventPresenterSpy";
 import {ListEventsPresenterSpy} from "./presenterTestDoubles/ListEventsPresenterSpy";
 import {ExportConfigurationPresenterSpy} from "./presenterTestDoubles/ExportConfigurationPresenterSpy";
-import {make} from '../main'
+import {make} from '../makeDependencies'
 
 const expectDotJsonFileToMatchDefaults = (dotJsonFileName, actualConfiguration) => {
   expect(actualConfiguration[dotJsonFileName]).toStrictEqual(expectedDefaults[dotJsonFileName])
