@@ -67,7 +67,7 @@ export default ({
 
   return () => <>
     <Router>
-      <TrackSelectionPage path="/"/>
+      <TrackSelectionPage path="/events/new"/>
       <EventListPage path="/events"/>
       <EventCreatorPage path="/events/:id"/>
       <ConfigPreviewPage path="/events/:id/preview"/>

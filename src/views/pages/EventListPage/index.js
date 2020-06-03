@@ -26,7 +26,7 @@ export default ({Layout, navigate, listEvents}) =>
                      icon="heart-broken"
                      action={
                        <AnchorButton intent={Intent.PRIMARY}
-                                     onClick={() => navigate("/")}>
+                                     onClick={() => navigate("/events/new")}>
                          Create one
                        </AnchorButton>
                      }/>
@@ -34,18 +34,16 @@ export default ({Layout, navigate, listEvents}) =>
 
     return <Layout contextual={<Button intent={Intent.PRIMARY}
                                        text="Create"
-                                       onClick={() => navigate("/")}/>}>
+                                       onClick={() => navigate("/events/new")}/>}>
       <HTMLTable interactive={true} striped={true}>
         <thead>
         <tr>
-          <th>id</th>
           <th>event name</th>
           <th>track name</th>
         </tr>
         </thead>
         <tbody>
         {events.map((event) => <tr key={event.id} onClick={() => navigate(`/events/${event.id}`)}>
-          <td>{event.id}</td>
           <td>{event.name}</td>
           <td>{event.track_name}</td>
         </tr>)}

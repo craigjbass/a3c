@@ -65,8 +65,8 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                      icon="heart-broken"
                      action={
                        <AnchorButton intent={Intent.PRIMARY}
-                                     onClick={() => navigate("/")}>
-                         Choose track
+                                     onClick={() => navigate("/events/new")}>
+                         Create
                        </AnchorButton>
                      }/>
     </Layout>
