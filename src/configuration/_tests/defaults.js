@@ -37,23 +37,23 @@ export default {
         "weatherRandomness": 1,
         "sessions": [
             {
-                "hourOfDay": 6,
-                "dayOfWeekend": 1,
-                "timeMultiplier": 1,
+                "hourOfDay": 10,
+                "dayOfWeekend": 2,
+                "timeMultiplier": 6,
                 "sessionType": "P",
                 "sessionDurationMinutes": 10
             },
             {
-                "hourOfDay": 12,
-                "dayOfWeekend": 1,
-                "timeMultiplier": 1,
+                "hourOfDay": 15,
+                "dayOfWeekend": 2,
+                "timeMultiplier": 5,
                 "sessionType": "Q",
                 "sessionDurationMinutes": 10
             },
             {
-                "hourOfDay": 18,
-                "dayOfWeekend": 2,
-                "timeMultiplier": 2,
+                "hourOfDay": 11,
+                "dayOfWeekend": 3,
+                "timeMultiplier": 3,
                 "sessionType": "R",
                 "sessionDurationMinutes": 20
             }

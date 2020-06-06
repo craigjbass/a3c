@@ -118,10 +118,10 @@ test('can create a new event', () => {
   expect(presenter.raceSessions[0]).toStrictEqual(
     {
       id: presenter.raceSessions[0].id,
-      startAt: '18:00',
-      endAt: '18:40',
-      startOn: 'Saturday',
-      timeMultiplier: '2',
+      startAt: '11:00',
+      endAt: '12:00',
+      startOn: 'Sunday',
+      timeMultiplier: '3',
       actualDuration: '20',
     }
   )
@@ -129,10 +129,10 @@ test('can create a new event', () => {
   expect(presenter.nonRaceSessions[0]).toStrictEqual(
     {
       id: presenter.nonRaceSessions[0].id,
-      startAt: '06:00',
-      endAt: '06:10',
-      startOn: 'Friday',
-      timeMultiplier: '1',
+      startAt: '10:00',
+      endAt: '11:00',
+      startOn: 'Saturday',
+      timeMultiplier: '6',
       actualDuration: '10',
       type: 'Practice'
     }
@@ -140,10 +140,10 @@ test('can create a new event', () => {
   expect(presenter.nonRaceSessions[1]).toStrictEqual(
     {
       id: presenter.nonRaceSessions[1].id,
-      startAt: '12:00',
-      endAt: '12:10',
-      startOn: 'Friday',
-      timeMultiplier: '1',
+      startAt: '15:00',
+      endAt: '15:50',
+      startOn: 'Saturday',
+      timeMultiplier: '5',
       actualDuration: '10',
       type: 'Qualifying'
     }
@@ -171,25 +171,25 @@ test('can not delete the last of session of an event', () => {
   const actualConfiguration = presenter2.configuration
   expect(actualConfiguration['event.json']['sessions']).toStrictEqual([
     {
-      "dayOfWeekend": 1,
-      "hourOfDay": 6,
+      "dayOfWeekend": 2,
+      "hourOfDay": 10,
       "sessionDurationMinutes": 10,
       "sessionType": "P",
-      "timeMultiplier": 1,
-    },
-    {
-      "dayOfWeekend": 1,
-      "hourOfDay": 12,
-      "sessionDurationMinutes": 10,
-      "sessionType": "Q",
-      "timeMultiplier": 1,
+      "timeMultiplier": 6,
     },
     {
       "dayOfWeekend": 2,
-      "hourOfDay": 18,
+      "hourOfDay": 15,
+      "sessionDurationMinutes": 10,
+      "sessionType": "Q",
+      "timeMultiplier": 5,
+    },
+    {
+      "dayOfWeekend": 3,
+      "hourOfDay": 11,
       "sessionDurationMinutes": 20,
       "sessionType": "R",
-      "timeMultiplier": 2,
+      "timeMultiplier": 3,
     }
   ])
 })
@@ -214,18 +214,18 @@ test('can delete a non race session', () => {
   const actualConfiguration = presenter2.configuration
   expect(actualConfiguration['event.json']['sessions']).toStrictEqual([
     {
-      "dayOfWeekend": 1,
-      "hourOfDay": 12,
+      "dayOfWeekend": 2,
+      "hourOfDay": 15,
       "sessionDurationMinutes": 10,
       "sessionType": "Q",
-      "timeMultiplier": 1,
+      "timeMultiplier": 5,
     },
     {
-      "dayOfWeekend": 2,
-      "hourOfDay": 18,
+      "dayOfWeekend": 3,
+      "hourOfDay": 11,
       "sessionDurationMinutes": 20,
       "sessionType": "R",
-      "timeMultiplier": 2,
+      "timeMultiplier": 3,
     }
   ])
 })

@@ -30,8 +30,15 @@ export const viewEvent = (configurationState) =>
         variant_name: variant.variant_name
       }
     )
-    event.raceSessions.forEach(presenter.raceSession.bind(presenter))
-    event.nonRaceSessions.forEach(presenter.nonRaceSession.bind(presenter))
+    const p = (presenter) => (session) => {
+      const ms = (session.actualDuration * session.timeMultiplier) * 60000
+      var newTime =new Date('1970-01-01T' + session.startAt ).getTime() + ms
+      var endAt = new Date(newTime).toLocaleString('en-GB').slice(12 ,17)
+
+      presenter({...session, endAt})
+    }
+    event.raceSessions.forEach(p(presenter.raceSession.bind(presenter)))
+    event.nonRaceSessions.forEach(p(presenter.nonRaceSession.bind(presenter)))
 
     presenter.done(event.name)
   }
@@ -43,19 +50,17 @@ export const createEvent = (configurationState) =>
       nonRaceSessions: [
         {
           id: uuid(),
-          startAt: '06:00',
-          endAt: '06:10',
-          startOn: 'Friday',
-          timeMultiplier: '1',
+          startAt: '10:00',
+          startOn: 'Saturday',
+          timeMultiplier: '6',
           actualDuration: '10',
           type: 'Practice'
         },
         {
           id: uuid(),
-          startAt: '12:00',
-          endAt: '12:10',
-          startOn: 'Friday',
-          timeMultiplier: '1',
+          startAt: '15:00',
+          startOn: 'Saturday',
+          timeMultiplier: '5',
           actualDuration: '10',
           type: 'Qualifying'
         }
@@ -63,10 +68,9 @@ export const createEvent = (configurationState) =>
       raceSessions: [
         {
           id: uuid(),
-          startAt: '18:00',
-          endAt: '18:40',
-          startOn: 'Saturday',
-          timeMultiplier: '2',
+          startAt: '11:00',
+          startOn: 'Sunday',
+          timeMultiplier: '3',
           actualDuration: '20',
         }
       ]

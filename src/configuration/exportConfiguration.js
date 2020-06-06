@@ -43,15 +43,15 @@ export default (configurationState) =>
       "sessions": [].concat(
         event.nonRaceSessions.map(s => ({
           "hourOfDay": parseInt(s.startAt.split(':')[0].replace(/^0/, '')),
-          "dayOfWeekend": 1,
-          "timeMultiplier": 1,
+          "dayOfWeekend": ['Friday', 'Saturday', 'Sunday'].indexOf(s.startOn) + 1,
+          "timeMultiplier": parseInt(s.timeMultiplier),
           "sessionType": s.type === "Qualifying" ? "Q" : "P",
           "sessionDurationMinutes": 10
         })),
         event.raceSessions.map(s => ({
-          "hourOfDay": 18,
-          "dayOfWeekend": 2,
-          "timeMultiplier": 2,
+          "hourOfDay": parseInt(s.startAt.split(':')[0].replace(/^0/, '')),
+          "dayOfWeekend": ['Friday', 'Saturday', 'Sunday'].indexOf(s.startOn) + 1,
+          "timeMultiplier": parseInt(s.timeMultiplier),
           "sessionType": "R",
           "sessionDurationMinutes": 20
         }))
