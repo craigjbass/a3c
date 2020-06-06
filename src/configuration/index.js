@@ -32,10 +32,9 @@ export const viewEvent = (configurationState) =>
       }
     )
     const p = (presenter) => (session) => {
-      const ms = (session.actualDuration * session.timeMultiplier) * 60000
-      var newTime = new Date('1970-01-01T' + session.startAt).getTime() + ms
-      var endAt = new Date(newTime).toLocaleString('en-GB').slice(12, 17)
-
+      const startTime = DateTime.fromObject({hour: session.startAt.slice(0, 2)})
+      const endTime = startTime.plus(Duration.fromMillis(session.actualDuration * session.timeMultiplier * 60000))
+      const endAt = endTime.toFormat("HH:mm")
       presenter({...session, endAt})
     }
     event.raceSessions.forEach(p(presenter.raceSession.bind(presenter)))
