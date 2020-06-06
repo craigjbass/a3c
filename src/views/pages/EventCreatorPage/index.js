@@ -1,22 +1,26 @@
 import React, {useState, useEffect} from "react";
 import {
+  AnchorButton,
+  Breadcrumbs,
+  Button,
+  ButtonGroup,
+  Card,
+  Classes,
+  Drawer,
   EditableText,
+  Elevation,
   H1,
   H2,
   H4,
-  Drawer,
-  Card,
-  Breadcrumbs,
-  Elevation,
-  ButtonGroup,
-  AnchorButton,
-  Button,
-  Spinner,
-  NonIdealState,
+  H5,
   Intent,
+  NonIdealState,
+  Position,
+  Spinner,
   Tag,
-  Position, H5
 } from "@blueprintjs/core";
+
+import { TimePicker } from "@blueprintjs/datetime";
 
 import './EventCreatorPage.css'
 
@@ -169,7 +173,14 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
       <Drawer isOpen={drawerOpen}
               size={Drawer.SIZE_SMALL}
               position={Position.LEFT}
-              onClose={() => setDrawerOpen(false)}/>
+              title="Session options"
+              onClose={() => setDrawerOpen(false)}>
+        <div className={Classes.DRAWER_BODY}>
+          <div className={Classes.DIALOG_BODY}>
+            <TimePicker />
+          </div>
+        </div>
+      </Drawer>
     </Layout>
   };
 }

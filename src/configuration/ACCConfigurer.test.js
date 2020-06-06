@@ -315,3 +315,115 @@ test('can update event name', () => {
   expect(exportPresenter.eventName).toBe('My Great Event')
 
 })
+
+test('can edit race session', () => {
+  const {createEvent, editSession, viewEvent} = make()
+
+  const {id} = createEvent({track_id: 'brands_hatch'})
+
+  {
+    const sessionPresenter = new ViewEventPresenterSpy()
+    viewEvent({id}, sessionPresenter)
+    const sessionId = sessionPresenter.raceSessions[0].id
+    const success = jest.fn()
+    editSession({
+      id: sessionId,
+      eventId: id,
+      startAt: '19:11',
+      startOn: 'Saturday',
+      timeMultiplier: '4',
+      actualDuration: '30'
+    }, {success})
+    expect(success).toHaveBeenCalled()
+  }
+
+  {
+    const sessionPresenter = new ViewEventPresenterSpy()
+    viewEvent({id}, sessionPresenter)
+    expect(sessionPresenter.raceSessions[0].startAt).toBe('19:00')
+    expect(sessionPresenter.raceSessions[0].startOn).toBe('Saturday')
+    expect(sessionPresenter.raceSessions[0].endAt).toBe('21:00')
+    expect(sessionPresenter.raceSessions[0].timeMultiplier).toBe('4')
+    expect(sessionPresenter.raceSessions[0].actualDuration).toBe('30')
+  }
+})
+
+test('can edit non-race session', () => {
+  const {createEvent, editSession, viewEvent} = make()
+
+  const {id} = createEvent({track_id: 'brands_hatch'})
+
+  {
+    const sessionPresenter = new ViewEventPresenterSpy()
+    viewEvent({id}, sessionPresenter)
+    const sessionId = sessionPresenter.nonRaceSessions[0].id
+    const success = jest.fn()
+    editSession({
+      id: sessionId,
+      eventId: id,
+      startAt: '19:11',
+      startOn: 'Saturday',
+      timeMultiplier: '4',
+      actualDuration: '30'
+    }, {success})
+    expect(success).toHaveBeenCalled()
+  }
+
+  {
+    const sessionPresenter = new ViewEventPresenterSpy()
+    viewEvent({id}, sessionPresenter)
+    expect(sessionPresenter.nonRaceSessions[0].startAt).toBe('19:00')
+    expect(sessionPresenter.nonRaceSessions[0].startOn).toBe('Saturday')
+    expect(sessionPresenter.nonRaceSessions[0].endAt).toBe('21:00')
+    expect(sessionPresenter.nonRaceSessions[0].timeMultiplier).toBe('4')
+    expect(sessionPresenter.nonRaceSessions[0].actualDuration).toBe('30')
+  }
+})
+
+test('cannot place race before non-race', () => {
+  const {createEvent, editSession, viewEvent} = make()
+
+  const {id} = createEvent({track_id: 'brands_hatch'})
+
+  {
+    const sessionPresenter = new ViewEventPresenterSpy()
+    viewEvent({id}, sessionPresenter)
+    const sessionId = sessionPresenter.raceSessions[0].id
+    const success = jest.fn()
+    const error = jest.fn()
+    editSession({
+      id: sessionId,
+      eventId: id,
+      startAt: '14:00',
+      startOn: 'Saturday',
+      timeMultiplier: '1',
+      actualDuration: '30'
+    }, {success, error})
+    expect(success).toHaveBeenCalledTimes(0)
+    expect(error).toHaveBeenCalledWith("RACE_OCCURS_BEFORE_NON_RACE")
+  }
+})
+
+test('cannot place a race overlapping non-race', () => {
+  const {createEvent, editSession, viewEvent} = make()
+
+  const {id} = createEvent({track_id: 'brands_hatch'})
+
+  {
+    const sessionPresenter = new ViewEventPresenterSpy()
+    viewEvent({id}, sessionPresenter)
+    const sessionId = sessionPresenter.raceSessions[0].id
+    const success = jest.fn()
+    const error = jest.fn()
+    editSession({
+      id: sessionId,
+      eventId: id,
+      startAt: '15:00',
+      startOn: 'Saturday',
+      timeMultiplier: '1',
+      actualDuration: '30'
+    }, {success, error})
+    expect(success).toHaveBeenCalledTimes(0)
+    expect(error).toHaveBeenCalledWith("EVENTS_OVERLAP")
+  }
+})

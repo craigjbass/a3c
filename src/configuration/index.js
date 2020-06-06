@@ -1,7 +1,8 @@
 import _exportConfiguration from './exportConfiguration'
 import tracks from './tracks'
-import { v4 as uuid } from 'uuid';
+import {v4 as uuid} from 'uuid';
 import trackDefaults from "./trackDefaults";
+import { DateTime, Duration, Interval } from 'luxon';
 
 export const exportConfiguration = _exportConfiguration
 
@@ -32,8 +33,8 @@ export const viewEvent = (configurationState) =>
     )
     const p = (presenter) => (session) => {
       const ms = (session.actualDuration * session.timeMultiplier) * 60000
-      var newTime =new Date('1970-01-01T' + session.startAt ).getTime() + ms
-      var endAt = new Date(newTime).toLocaleString('en-GB').slice(12 ,17)
+      var newTime = new Date('1970-01-01T' + session.startAt).getTime() + ms
+      var endAt = new Date(newTime).toLocaleString('en-GB').slice(12, 17)
 
       presenter({...session, endAt})
     }
@@ -109,3 +110,59 @@ export const deleteSessionFromEvent = (configurationState) => {
     })
   };
 }
+
+export const editSession = (configurationState) =>
+  ({eventId, id, startAt, startOn, timeMultiplier, actualDuration}, {success, error}) => {
+
+    const event = configurationState.getEvent(eventId)
+
+    const intervals = event.nonRaceSessions.map((s) => {
+      return Interval.after(DateTime.fromObject({
+        year: 2020,
+        month: 6,
+        day: ['Friday', 'Saturday', 'Sunday'].indexOf(s.startOn) + 5,
+        hour: s.startAt.slice(0, 2)
+      }), Duration.fromMillis(s.actualDuration * 60000 * s.timeMultiplier))
+    })
+    
+    const newSessionTime = DateTime.fromObject({
+      year: 2020,
+      month: 6,
+      day: ['Friday', 'Saturday', 'Sunday'].indexOf(startOn) + 5,
+      hour: startAt.slice(0, 2)
+    })
+
+    const newSessionInterval = Interval.after(newSessionTime, Duration.fromMillis(
+      actualDuration * 60000 * timeMultiplier
+    ))
+
+    const afters = intervals.map(i => i.isAfter(newSessionTime))
+    const overlappers = intervals.map(i => i.overlaps(newSessionInterval))
+    if(afters.includes(true)) {
+      error("RACE_OCCURS_BEFORE_NON_RACE")
+      return
+    }
+
+    if(overlappers.includes(true)) {
+      error("EVENTS_OVERLAP")
+      return
+    }
+
+    configurationState.update(eventId, (event) => {
+      const raceSessionsId = event.raceSessions.findIndex((s) => s.id === id)
+      const nonRaceSessionsId = event.nonRaceSessions.findIndex((s) => s.id === id)
+      let session
+      if(raceSessionsId !== -1) {
+        session = event.raceSessions[raceSessionsId]
+      } else {
+        session = event.nonRaceSessions[nonRaceSessionsId]
+      }
+
+      session.startAt = startAt.slice(0, 2) + ':00'
+      session.startOn = startOn
+      session.timeMultiplier = timeMultiplier
+      session.actualDuration = actualDuration
+      return {...event}
+    })
+    success()
+  }

@@ -1,5 +1,5 @@
 .app-frame {
-    width: 80%;
+    width: calc(100% - 60px);
     margin: 0 auto;
     margin-top: 25px;
     padding-top: 50px;
