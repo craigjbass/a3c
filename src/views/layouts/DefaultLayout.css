@@ -1,11 +1,20 @@
 .app-frame {
-    width: calc(100% - 60px);
-    margin: 0 auto;
-    margin-top: 25px;
-    padding-top: 50px;
+    width: 100%;
+    padding: 25px 30px 0 30px;
+    overflow-y: auto;
+    max-height: calc(100vh - 50px);
+}
+
+.navigation-bar-filler {
+    height: 50px;
+    width: 100%;
 }
 
 .navigation-bar {
     user-select: none;
-    -webkit-app-region: drag
+    -webkit-app-region: drag;
+}
+
+.no-drag {
+    -webkit-app-region: no-drag;
 }

@@ -46,6 +46,7 @@
     "build": "rescripts build",
     "test": "rescripts test",
     "electron-dev": "concurrently \"BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-dev-windows":"concurrently \"set BROWSER=none && npm run start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "npm run build",
     "electron-pack-mac": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder -m",

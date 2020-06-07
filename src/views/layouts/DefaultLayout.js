@@ -16,7 +16,7 @@ const ContextualItems = ({contextual}) => {
 
 export default ({navigate, quit}) => ({children, contextual}) => (<>
   <Navbar fixedToTop={true} className="navigation-bar bp3-dark">
-    <Navbar.Group align={Alignment.LEFT}>
+    <Navbar.Group align={Alignment.LEFT} className="no-drag">
       <Navbar.Heading>A3C</Navbar.Heading>
       <Button minimal={true}
               icon="cog"
@@ -26,7 +26,7 @@ export default ({navigate, quit}) => ({children, contextual}) => (<>
               onClick={() => navigate("/events")}/>
       <ContextualItems contextual={contextual}/>
     </Navbar.Group>
-    <Navbar.Group align={Alignment.RIGHT}>
+    <Navbar.Group align={Alignment.RIGHT} className="no-drag">
       <Button icon="cross"
               minimal={true}
               outlined={true}
@@ -34,6 +34,7 @@ export default ({navigate, quit}) => ({children, contextual}) => (<>
               onClick={() => quit()}/>
     </Navbar.Group>
   </Navbar>
+  <div className="navigation-bar-filler" />
   <div className="app-frame">
     {children}
   </div>
