@@ -32,7 +32,7 @@ import {DateTime} from "luxon";
 const initialState = {state: undefined, raceSessions: [], nonRaceSessions: []};
 
 export default ({Layout, viewEvent, exportConfiguration, updateEventName, deleteEvent, deleteSessionFromEvent, navigate, editSession}) => {
-  const toaster = Toaster.create({position: "top-right", className: "no-drag"})
+  const toaster = Toaster.create({position: "top-right"})
   const download = (eventId) => exportConfiguration({event_id: eventId})
   const deletThis = (id) => {
     deleteEvent({id})
@@ -95,7 +95,7 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                 message = "Unknown error"
                 break;
             }
-            toaster.show({message, intent: Intent.DANGER, icon: "warning-sign"})
+            toaster.show({message, intent: Intent.DANGER, icon: "warning-sign", className: "no-drag"})
           }
         }
       )

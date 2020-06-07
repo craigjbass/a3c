@@ -112,18 +112,7 @@ export const deleteSessionFromEvent = (configurationState) => {
 
 export const editSession = (configurationState) =>
   ({eventId, id, startAt, startOn, timeMultiplier, actualDuration}, {success, error}) => {
-
     const event = configurationState.getEvent(eventId)
-
-    const intervals = event.nonRaceSessions.map((s) => {
-      return Interval.after(DateTime.fromObject({
-        year: 2020,
-        month: 6,
-        day: ['Friday', 'Saturday', 'Sunday'].indexOf(s.startOn) + 5,
-        hour: s.startAt.slice(0, 2)
-      }), Duration.fromMillis(s.actualDuration * 60000 * s.timeMultiplier))
-    })
-    
     const newSessionTime = DateTime.fromObject({
       year: 2020,
       month: 6,
@@ -135,13 +124,34 @@ export const editSession = (configurationState) =>
       actualDuration * 60000 * timeMultiplier
     ))
 
-    const afters = intervals.map(i => i.isAfter(newSessionTime))
-    const overlappers = intervals.map(i => i.overlaps(newSessionInterval))
-    if(afters.includes(true)) {
-      error("RACE_OCCURS_BEFORE_NON_RACE")
-      return
+    const _createInterval = (s) => {
+      return Interval.after(DateTime.fromObject({
+        year: 2020,
+        month: 6,
+        day: ['Friday', 'Saturday', 'Sunday'].indexOf(s.startOn) + 5,
+        hour: s.startAt.slice(0, 2)
+      }), Duration.fromMillis(s.actualDuration * 60000 * s.timeMultiplier))
     }
 
+    const nonRaceIntervals = event.nonRaceSessions.filter(s => s.id !== id).map(_createInterval)
+    const raceIntervals = event.raceSessions.filter(s => s.id !== id).map(_createInterval)
+
+    const isEditToRaceSession = event.raceSessions.findIndex((s) => s.id === id) !== -1
+    if(isEditToRaceSession) {
+      const afters = nonRaceIntervals.map(i => i.isAfter(newSessionTime))
+      if(afters.includes(true)) {
+        error("RACE_OCCURS_BEFORE_NON_RACE")
+        return
+      }
+    } else {
+      const befores = raceIntervals.map(i => i.isBefore(newSessionTime))
+      if(befores.includes(true)) {
+        error("RACE_OCCURS_BEFORE_NON_RACE")
+        return
+      }
+    }
+
+    const overlappers = raceIntervals.concat(nonRaceIntervals).map(i => i.overlaps(newSessionInterval))
     if(overlappers.includes(true)) {
       error("OVERLAPPING_SESSIONS")
       return

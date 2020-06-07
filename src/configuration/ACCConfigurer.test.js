@@ -361,7 +361,7 @@ test('can edit non-race session', () => {
     editSession({
       id: sessionId,
       eventId: id,
-      startAt: '19:11',
+      startAt: '09:11',
       startOn: 'Saturday',
       timeMultiplier: '4',
       actualDuration: '30'
@@ -372,11 +372,59 @@ test('can edit non-race session', () => {
   {
     const sessionPresenter = new ViewEventPresenterSpy()
     viewEvent({id}, sessionPresenter)
-    expect(sessionPresenter.nonRaceSessions[0].startAt).toBe('19:00')
+    expect(sessionPresenter.nonRaceSessions[0].startAt).toBe('09:00')
     expect(sessionPresenter.nonRaceSessions[0].startOn).toBe('Saturday')
-    expect(sessionPresenter.nonRaceSessions[0].endAt).toBe('21:00')
+    expect(sessionPresenter.nonRaceSessions[0].endAt).toBe('11:00')
     expect(sessionPresenter.nonRaceSessions[0].timeMultiplier).toBe('4')
     expect(sessionPresenter.nonRaceSessions[0].actualDuration).toBe('30')
+  }
+})
+
+test('cannot place non-race after race session', () => {
+  const {createEvent, editSession, viewEvent} = make()
+
+  const {id} = createEvent({track_id: 'brands_hatch'})
+
+  {
+    const sessionPresenter = new ViewEventPresenterSpy()
+    viewEvent({id}, sessionPresenter)
+    const sessionId = sessionPresenter.nonRaceSessions[0].id
+    const success = jest.fn()
+    const error = jest.fn()
+    editSession({
+      id: sessionId,
+      eventId: id,
+      startAt: '12:00',
+      startOn: 'Sunday',
+      timeMultiplier: '4',
+      actualDuration: '30'
+    }, {success, error})
+    expect(success).toHaveBeenCalledTimes(0)
+    expect(error).toHaveBeenCalledWith("RACE_OCCURS_BEFORE_NON_RACE")
+  }
+})
+
+test('cannot overlap non-race with race session', () => {
+  const {createEvent, editSession, viewEvent} = make()
+
+  const {id} = createEvent({track_id: 'brands_hatch'})
+
+  {
+    const sessionPresenter = new ViewEventPresenterSpy()
+    viewEvent({id}, sessionPresenter)
+    const sessionId = sessionPresenter.nonRaceSessions[0].id
+    const success = jest.fn()
+    const error = jest.fn()
+    editSession({
+      id: sessionId,
+      eventId: id,
+      startAt: '10:00',
+      startOn: 'Sunday',
+      timeMultiplier: '12',
+      actualDuration: '30'
+    }, {success, error})
+    expect(success).toHaveBeenCalledTimes(0)
+    expect(error).toHaveBeenCalledWith("OVERLAPPING_SESSIONS")
   }
 })
 
