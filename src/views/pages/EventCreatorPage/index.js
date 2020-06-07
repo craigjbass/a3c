@@ -58,16 +58,23 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
           done: (name) => setEvent((e) => ({...e, name, state: 'done'})),
           track: (track) => setEvent((e) => ({...e, track})),
           raceSession: (session) => setEvent((e) => {
+            if(editSessionDrawer?.session?.id === session.id) {
+              setEditSessionDrawer((d) => ({...d, session}))
+            }
             return ({...e, raceSessions: [session].concat(e.raceSessions)});
           }),
-          nonRaceSession: (session) => setEvent((e) => ({...e, nonRaceSessions: [session].concat(e.nonRaceSessions)})),
+          nonRaceSession: (session) => setEvent((e) => {
+            if(editSessionDrawer?.session?.id === session.id) {
+              setEditSessionDrawer((d) => ({...d, session}))
+            }
+            return ({...e, nonRaceSessions: [session].concat(e.nonRaceSessions)});
+          }),
           weather: (weather) => setEvent((e) => ({...e, weather: weather}))
         }
       )
     }, [event, eventId, editSessionDrawer, setEditSessionDrawer])
-    console.log(editSessionDrawer)
+
     const _editSession = (session) => {
-      console.log(session)
       editSession(
         {...session, eventId},
         {
@@ -89,7 +96,6 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                 break;
             }
             toaster.show({message, intent: Intent.DANGER, icon: "warning-sign"})
-            console.log(errorCode)
           }
         }
       )
