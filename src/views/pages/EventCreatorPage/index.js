@@ -249,7 +249,7 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                               value={parseInt(editSessionDrawer.session.timeMultiplier, 10)}
                               clampValueOnBlur={true}
                               onValueChange={v => {
-                                if(isNaN(v) || v <= 0 || v > 23) {
+                                if(isNaN(v) || v <= 0 || v > 24) {
                                   return;
                                 }
                                 _editSession({
