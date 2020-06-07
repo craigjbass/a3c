@@ -46,14 +46,14 @@ export default (configurationState) =>
           "dayOfWeekend": ['Friday', 'Saturday', 'Sunday'].indexOf(s.startOn) + 1,
           "timeMultiplier": parseInt(s.timeMultiplier),
           "sessionType": s.type === "Qualifying" ? "Q" : "P",
-          "sessionDurationMinutes": 10
+          "sessionDurationMinutes": parseInt(s.actualDuration)
         })),
         event.raceSessions.map(s => ({
           "hourOfDay": parseInt(s.startAt.split(':')[0].replace(/^0/, '')),
           "dayOfWeekend": ['Friday', 'Saturday', 'Sunday'].indexOf(s.startOn) + 1,
           "timeMultiplier": parseInt(s.timeMultiplier),
           "sessionType": "R",
-          "sessionDurationMinutes": 20
+          "sessionDurationMinutes": parseInt(s.actualDuration)
         }))
       ),
       "qualifyStandingType": 1,
