@@ -11,7 +11,7 @@ const quit = () => {
   require('electron').remote.getCurrentWindow().close()
 }
 
-let history = createHistory(createMemorySource("/events"))
+let history = createHistory(createMemorySource("/events/a929735c-e149-41c5-b2bf-929a57d289ad"))
 
 const Router = ({children}) => <LocationProvider history={history}>
   <ReachRouter>

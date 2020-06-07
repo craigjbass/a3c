@@ -143,7 +143,7 @@ export const editSession = (configurationState) =>
     }
 
     if(overlappers.includes(true)) {
-      error("EVENTS_OVERLAP")
+      error("OVERLAPPING_SESSIONS")
       return
     }
 

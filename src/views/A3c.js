@@ -9,16 +9,17 @@ import saveAsZipPresenter from "../presenter/saveAsZip";
 
 export default ({
                   Router,
-                  navigate,
-                  quit,
                   createEvent,
-                  viewEvent,
+                  deleteEvent,
+                  deleteSessionFromEvent,
+                  editSession,
+                  exportConfiguration,
                   listAvailableTracks,
                   listEvents,
-                  exportConfiguration,
+                  navigate,
+                  quit,
                   updateEventName,
-                  deleteEvent,
-                  deleteSessionFromEvent
+                  viewEvent,
                 }) => {
   const DefaultLayout = _DefaultLayout({navigate, quit})
 
@@ -42,12 +43,13 @@ export default ({
   const EventCreatorPage = _EventCreatorPage(
     {
       Layout: DefaultLayout,
-      navigate,
-      viewEvent,
-      updateEventName,
       deleteEvent,
       deleteSessionFromEvent,
-      exportConfiguration: (params) => exportConfiguration({...params}, saveAsZipPresenter)
+      editSession,
+      exportConfiguration: (params) => exportConfiguration({...params}, saveAsZipPresenter),
+      navigate,
+      updateEventName,
+      viewEvent,
     }
   )
 

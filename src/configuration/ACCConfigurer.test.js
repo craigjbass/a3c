@@ -424,6 +424,6 @@ test('cannot place a race overlapping non-race', () => {
       actualDuration: '30'
     }, {success, error})
     expect(success).toHaveBeenCalledTimes(0)
-    expect(error).toHaveBeenCalledWith("EVENTS_OVERLAP")
+    expect(error).toHaveBeenCalledWith("OVERLAPPING_SESSIONS")
   }
 })
