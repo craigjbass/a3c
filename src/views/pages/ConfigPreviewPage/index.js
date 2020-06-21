@@ -15,7 +15,7 @@ export default ({Layout, exportConfiguration, navigate}) => {
 
     if (configuration === undefined) return <></>
 
-    return <Layout contextual={<AnchorButton icon={"edit"} onClick={() => back(id)}>Edit</AnchorButton>}>
+    return <Layout contextual={<AnchorButton icon={"arrow-left"} minimal={true} onClick={() => back(id)}>Back</AnchorButton>}>
       <Tabs>
         {Object.entries(configuration).map(([fileName, contents]) => {
           return <Tab key={fileName} id={fileName} title={fileName} panel={<Pre>

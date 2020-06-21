@@ -26,6 +26,8 @@ export default ({Layout, navigate, listEvents}) =>
                      icon="heart-broken"
                      action={
                        <AnchorButton intent={Intent.PRIMARY}
+                                     minimal={true}
+                                     outlined={true}
                                      onClick={() => navigate("/events/new")}>
                          Create one
                        </AnchorButton>
@@ -34,6 +36,8 @@ export default ({Layout, navigate, listEvents}) =>
 
     return <Layout contextual={<Button intent={Intent.PRIMARY}
                                        text="Create"
+                                       minimal={true}
+                                       outlined={true}
                                        onClick={() => navigate("/events/new")}/>}>
       <HTMLTable interactive={true} striped={true}>
         <thead>

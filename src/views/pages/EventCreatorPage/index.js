@@ -14,9 +14,9 @@ import {
   H2,
   H4,
   H5,
-  Intent,
+  Intent, Menu, MenuDivider, MenuItem, NavbarDivider,
   NonIdealState,
-  NumericInput,
+  NumericInput, Popover,
   Position,
   Radio,
   RadioGroup,
@@ -58,13 +58,13 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
           done: (name) => setEvent((e) => ({...e, name, state: 'done'})),
           track: (track) => setEvent((e) => ({...e, track})),
           raceSession: (session) => setEvent((e) => {
-            if(editSessionDrawer?.session?.id === session.id) {
+            if (editSessionDrawer?.session?.id === session.id) {
               setEditSessionDrawer((d) => ({...d, session}))
             }
             return ({...e, raceSessions: [session].concat(e.raceSessions)});
           }),
           nonRaceSession: (session) => setEvent((e) => {
-            if(editSessionDrawer?.session?.id === session.id) {
+            if (editSessionDrawer?.session?.id === session.id) {
               setEditSessionDrawer((d) => ({...d, session}))
             }
             return ({...e, nonRaceSessions: [session].concat(e.nonRaceSessions)});
@@ -84,7 +84,7 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
           error: (errorCode) => {
             setEvent({...event, raceSessions: [], nonRaceSessions: [], state: 'refresh'})
             let message
-            switch(errorCode) {
+            switch (errorCode) {
               case 'RACE_OCCURS_BEFORE_NON_RACE':
                 message = "Races cannot occur before non-race sessions."
                 break;
@@ -118,18 +118,48 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
 
     return <Layout contextual={
       <>
-        <Button intent={Intent.DANGER}
-                onClick={() => deletThis(eventId)}>
-          Delete
-        </Button>
-        <Button icon="cloud-download"
-                onClick={() => download(eventId)}>
-          Export
-        </Button>
-        <Button icon="eye-open"
-                onClick={() => preview(eventId)}>
-          Preview
-        </Button>
+        <Popover inheritDarkTheme={false}
+                 content={<Menu>
+                   <MenuItem text="Save as .zip"
+                             onClick={() => download(eventId)}
+                             icon={"floppy-disk"}/>
+                   <MenuItem text="Preview"
+                             onClick={() => preview(eventId)}
+                             icon={"eye-open"}/>
+                   <MenuDivider />
+                   <MenuItem intent={Intent.DANGER}
+                             text="Delete"
+                             icon={"delete"}
+                             onClick={() => deletThis(eventId)}/>
+                 </Menu>}
+                 position={"bottom"}>
+          <Button icon="document-open"
+                  rightIcon="caret-down"
+                  minimal={true}
+                  outlined={true}
+                  onClick={() => {
+                  }}>
+            File
+          </Button>
+        </Popover>
+
+
+        <Popover inheritDarkTheme={false}
+                 content={<Menu>
+                   <MenuItem text="Locally" icon={"desktop"}/>
+                   <MenuItem text="In the Cloud" icon={"cloud-upload"}/>
+
+                 </Menu>}
+                 position={"bottom"}>
+          <Button icon="play"
+                  intent={Intent.SUCCESS}
+                  minimal={true}
+                  outlined={true}
+                  onClick={() => {
+                  }}/>
+        </Popover>
+
+
       </>
     }>
       <Breadcrumbs
@@ -159,7 +189,11 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
           <div className="sessions">
             {event.raceSessions.map((session) => <Card elevation={Elevation.TWO}
                                                        interactive={true}
-                                                       onClick={() => setEditSessionDrawer((d) => ({...d, open: true, session}))}
+                                                       onClick={() => setEditSessionDrawer((d) => ({
+                                                         ...d,
+                                                         open: true,
+                                                         session
+                                                       }))}
                                                        className="sessions_Session">
                 <H4>Race ({session.startOn}) <Button icon="trash"
                                                      disabled={event.raceSessions.length < 2}
@@ -229,7 +263,7 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                               value={parseInt(editSessionDrawer.session.startAt.slice(0, 2), 10)}
                               clampValueOnBlur={true}
                               onValueChange={v => {
-                                if(isNaN(v) || v < 0 || v > 23) {
+                                if (isNaN(v) || v < 0 || v > 23) {
                                   return;
                                 }
                                 _editSession({
@@ -249,7 +283,7 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                               value={parseInt(editSessionDrawer.session.timeMultiplier, 10)}
                               clampValueOnBlur={true}
                               onValueChange={v => {
-                                if(isNaN(v) || v <= 0 || v > 24) {
+                                if (isNaN(v) || v <= 0 || v > 24) {
                                   return;
                                 }
                                 _editSession({
@@ -269,7 +303,7 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                               value={parseInt(editSessionDrawer.session.actualDuration, 10)}
                               clampValueOnBlur={true}
                               onValueChange={v => {
-                                if(isNaN(v) || v < 0) {
+                                if (isNaN(v) || v < 0) {
                                   return;
                                 }
                                 _editSession({
@@ -292,9 +326,9 @@ export default ({Layout, viewEvent, exportConfiguration, updateEventName, delete
                 }}
                 selectedValue={editSessionDrawer.session.startOn}
               >
-                <Radio label="Friday" value="Friday" />
-                <Radio label="Saturday" value="Saturday" />
-                <Radio label="Sunday" value="Sunday" />
+                <Radio label="Friday" value="Friday"/>
+                <Radio label="Saturday" value="Saturday"/>
+                <Radio label="Sunday" value="Sunday"/>
               </RadioGroup>
             </div>
           </div>
