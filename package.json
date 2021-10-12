@@ -70,7 +70,7 @@
     "@rescripts/cli": "0.0.14",
     "concurrently": "^5.2.0",
     "electron-builder": "^22.7.0",
-    "electron": "^9.0.1",
+    "electron": "^11.5.0",
     "wait-on": "^5.0.0"
   }
 }
